@@ -75,7 +75,7 @@ export default function Header() {
           <Box className="flex items-center space-x-4">
             <Link href="/" passHref>
               <img
-                src="/logo.jpg"
+                src="/logo3.webp"
                 alt="MyLogo"
                 className="h-10 cursor-pointer"
               />
@@ -164,21 +164,13 @@ export default function Header() {
           </Box>
 
           <List>
-            <ListItem button>
-              <Link href="/" passHref>
-                <ListItemText primary="Home" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <Link href="/about" passHref>
-                <ListItemText primary="About" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <Link href="/contact" passHref>
-                <ListItemText primary="Contact" />
-              </Link>
-            </ListItem>
+            {links.map((link) => (
+              <ListItem button key={link.href}>
+                <Link href={link.href} passHref>
+                  <ListItemText primary={link.label} />
+                </Link>
+              </ListItem>
+            ))}
           </List>
         </Box>
       </Drawer>
