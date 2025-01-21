@@ -53,7 +53,6 @@ const ProductDetail = () => {
   const reviewsToShow = showAllReviews ? reviews : reviews.slice(0, 3);
 
   const handleAddToCart = () => {
-    // Add product to cart
     setCart([
       ...cart,
       { id: "product-123", title: "Product Title", price: 100 },
@@ -75,7 +74,10 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
+    <Box
+      className="min-h-screen py-8"
+      sx={{ backgroundColor: "secondary.sec" }}
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Product Details */}
         <div className="flex flex-col md:flex-row gap-8 items-start bg-white shadow-lg rounded-lg p-6">
@@ -95,34 +97,45 @@ const ProductDetail = () => {
             <Typography
               variant="h4"
               component="h1"
-              className="font-bold text-gray-800 mb-4"
+              sx={{
+                fontWeight: "bold",
+                color: "primary.main",
+                marginBottom: 2,
+              }}
             >
               Product Title
             </Typography>
-            <Typography variant="body1" className="text-gray-600 mb-4">
+            <Typography variant="body1" sx={{ mb: 2 }}>
               Description of the product goes here. It provides detailed
               information about the product.
             </Typography>
-            <Typography variant="h6" className="text-gray-700 font-medium mb-2">
-              Price: <span className="text-blue-600 font-bold">$100</span>
+            <Typography variant="h6">
+              Price:{" "}
+              <span style={{ color: "#113065", fontWeight: "bold" }}>
+                1000 INR
+              </span>
             </Typography>
-            <Typography variant="h6" className="text-gray-700 font-medium mb-2">
-              Weight: <span className="text-blue-600 font-bold">1.5kg</span>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              Weight:{" "}
+              <span style={{ color: "#113065", fontWeight: "bold" }}>
+                500 gm
+              </span>
             </Typography>
-            <Typography variant="body1" className="text-gray-500 mb-4">
+
+            <Typography variant="body1" sx={{ mb: 3 }}>
               Product Code:{" "}
-              <span className="text-gray-800 font-medium">ABC123</span>
+              <span className="text-gray-800 font-medium">PTC079</span>
             </Typography>
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddToCart}
               sx={{
-                backgroundColor: "#113065",
+                backgroundColor: "primary.main",
                 color: "white",
                 "&:hover": {
-                  backgroundColor: "white",
-                  color: "#113065",
+                  backgroundColor: "secondary.main",
+                  color: "primary.main",
                   fontWeight: "bold",
                 },
                 transition: "background-color 0.3s ease, color 0.3s ease",
@@ -135,7 +148,7 @@ const ProductDetail = () => {
 
         {/* Reviews Section */}
         <div className="mt-12">
-          <Typography variant="h5" className="text-[#113065] mb-6">
+          <Typography variant="h5" sx={{ color: "primary.main", mb: 6 }}>
             Customer Reviews
           </Typography>
 
@@ -143,13 +156,19 @@ const ProductDetail = () => {
             {reviewsToShow.map((review) => (
               <Card
                 key={review.id}
-                className="shadow-md border border-[#113065] hover:shadow-lg transition-shadow duration-300"
+                sx={{
+                  boxShadow: 2,
+                  borderColor: "primary.main",
+                  "&:hover": {
+                    boxShadow: 6,
+                  },
+                }}
               >
                 <CardContent>
                   <Typography
                     variant="h6"
                     component="h2"
-                    className="text-[#113065] font-medium"
+                    sx={{ color: "primary.main", fontWeight: "medium" }}
                   >
                     {review.reviewer}
                   </Typography>
@@ -160,11 +179,14 @@ const ProductDetail = () => {
                       readOnly
                       size="small"
                     />
-                    <Typography variant="body2" className="text-gray-500 ml-2">
+                    <Typography
+                      variant="body2"
+                      sx={{ color: "text.secondary", ml: 2 }}
+                    >
                       {review.rating} Stars
                     </Typography>
                   </Box>
-                  <Typography variant="body2" className="text-gray-600">
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
                     {review.comment}
                   </Typography>
                 </CardContent>
@@ -178,8 +200,8 @@ const ProductDetail = () => {
                 variant="outlined"
                 onClick={toggleReviews}
                 sx={{
-                  backgroundColor: "#113065",
-                  color: "#fff",
+                  backgroundColor: "primary.main",
+                  color: "white",
                 }}
               >
                 {showAllReviews ? "Show Less" : "View All"}
@@ -190,7 +212,7 @@ const ProductDetail = () => {
 
         {/* Add Review Section */}
         <div className="mt-12">
-          <Typography variant="h5" className="text-[#113065] mb-6">
+          <Typography variant="h5" sx={{ color: "primary.main", mb: 6 }}>
             Add Your Review
           </Typography>
           <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -227,10 +249,12 @@ const ProductDetail = () => {
               variant="contained"
               color="primary"
               type="submit"
-              className="bg-[#113065] hover:bg-[#0f274f]"
               sx={{
-                backgroundColor: "#113065",
+                backgroundColor: "primary.main",
                 color: "#fff",
+                "&:hover": {
+                  backgroundColor: "secondary.main",
+                },
               }}
             >
               Submit Review
@@ -238,7 +262,7 @@ const ProductDetail = () => {
           </form>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 

@@ -11,8 +11,9 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from "@mui/material";
-import { Search, ShoppingCart, Menu } from "@mui/icons-material";
+import { Person, Search, ShoppingCart, Menu } from "@mui/icons-material";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 
@@ -28,7 +29,6 @@ export default function Header() {
     { href: "/contact-us", label: "Contact Us" },
   ];
 
-  // Toggle drawer/Hamburger Menu open/close
   const toggleDrawer = (open) => (event) => {
     if (
       event.type === "keydown" &&
@@ -39,7 +39,6 @@ export default function Header() {
     setDrawerOpen(open);
   };
 
-  // Toggle search bar visibility and focus on it
   const toggleSearchBar = () => {
     setSearchOpen((prev) => !prev);
   };
@@ -52,12 +51,12 @@ export default function Header() {
     }
   }, [searchOpen]);
 
-  // Close search bar on screen resize
+  // Close Hamburger menu and Search bar on screen resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setDrawerOpen(false); // Automatically close Drawer on larger screens
-        setSearchOpen(false); // Automatically close Search on larger screens
+        setDrawerOpen(false);
+        setSearchOpen(false);
       }
     };
 
@@ -68,87 +67,119 @@ export default function Header() {
   }, []);
 
   return (
-    <div className="sticky top-0 z-50 bg-white shadow-md">
-      <AppBar position="sticky" style={{ backgroundColor: "#113065" }}>
-        <Toolbar className="flex items-center justify-between w-full">
-          {/* Logo */}
-          <Box className="flex items-center space-x-4">
-            <Link href="/" passHref>
-              <img
-                src="/logo3.webp"
-                alt="MyLogo"
-                className="h-10 cursor-pointer"
-              />
-            </Link>
-          </Box>
-
-          {/* Search Bar and Cart Icon */}
-          <Box
-            className="flex items-center ml-auto space-x-4"
-            sx={{ display: "flex" }} // Make sure both are visible on mobile
-          >
-            {/* Navigation Links (Desktop) */}
-            <Box
-              className="space-x-4" // Right-aligned links
-              sx={{ display: { xs: "none", md: "flex" }, ml: "auto" }} // Ensures links are right-aligned
-            >
-              {links.map((link) => (
-                <Link key={link.href} href={link.href} passHref>
-                  <Button color="inherit">{link.label}</Button>
-                </Link>
-              ))}
-            </Box>
-
-            {/* Search Icon */}
-            <IconButton
-              color="inherit"
-              sx={{ display: { xs: "block", md: "none" } }} // Visible on mobile
-              onClick={toggleSearchBar}
-            >
-              <Search />
-            </IconButton>
-
-            {/* Desktop Search Bar */}
-            <InputBase
-              className="bg-white rounded-md p-1 w-48 md:w-72"
-              sx={{ display: { xs: "none", md: "flex" } }}
-              placeholder="Search"
-              startAdornment={<Search sx={{ marginRight: 1 }} />}
+    <AppBar position="sticky" color="secondary" sx={{ boxShadow: 1 }}>
+      <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
+        {/* Logo Section */}
+        <Box display="flex" alignItems="center" gap={2}>
+          <Link href="/" passHref>
+            <img
+              src="/oneeye-removebg.png"
+              alt="Logo"
+              style={{ height: "40px", cursor: "pointer" }}
             />
+          </Link>
+          <Typography
+            variant="h6"
+            component="span"
+            sx={{ fontWeight: 600, fontSize: "0.9rem", color: "primary.main" }}
+          >
+            One Eye
+            <br />
+            Coconut
+          </Typography>
+        </Box>
 
-            <Link href="/login" passHref>
-              <Button color="inherit">Login</Button>
+        {/* Desktop Links */}
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, ml: "auto" }}>
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} passHref>
+              <Button color="primary" sx={{ fontWeight: 500 }}>
+                {link.label}
+              </Button>
             </Link>
+          ))}
+        </Box>
 
-            {/* Cart Icon */}
-            <IconButton color="inherit">
-              <ShoppingCart />
-            </IconButton>
+        {/* Action Icons */}
+        <Box display="flex" alignItems="center" gap={2}>
+          {/* Search Icon (Mobile) */}
+          <IconButton
+            color="primary"
+            onClick={toggleSearchBar}
+            sx={{ display: { xs: "flex", md: "none" } }}
+          >
+            <Search />
+          </IconButton>
 
-            {/* Hamburger Menu (Hidden on Desktop) */}
-            <IconButton
-              color="inherit"
-              sx={{ display: { xs: "block", md: "none" } }} // Visible on mobile
-              onClick={toggleDrawer(true)}
-            >
-              <Menu />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {/* Search Input (Mobile - Sticky like Navbar) */}
-      {searchOpen && (
-        <div className="sticky top-0 z-50 w-full bg-white shadow-md">
+          {/* Desktop Search Bar */}
           <InputBase
             ref={searchInputRef}
-            className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-blue-500 p-3"
+            sx={{
+              display: { xs: "none", md: "flex" },
+              backgroundColor: "background.default",
+              borderRadius: 1,
+              px: 2,
+              py: 1,
+              width: "200px",
+              "&:hover": {
+                boxShadow: 2,
+              },
+            }}
             placeholder="Search"
+            startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
           />
-        </div>
+
+          <Link href="/login" passHref>
+            <Button color="primary">
+              <Person sx={{ marginRight: 1 }} />
+            </Button>
+          </Link>
+
+          <IconButton color="primary">
+            <ShoppingCart />
+          </IconButton>
+
+          {/* Hamburger Menu */}
+          <IconButton
+            color="primary"
+            onClick={toggleDrawer(true)}
+            sx={{ display: { xs: "block", md: "none" } }}
+          >
+            <Menu />
+          </IconButton>
+        </Box>
+      </Toolbar>
+
+      {/* Mobile Search Bar */}
+      {searchOpen && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "56px",
+            left: 0,
+            width: "100%",
+            bgcolor: "background.default",
+            boxShadow: 2,
+            px: 2,
+            py: 1,
+          }}
+        >
+          <InputBase
+            ref={searchInputRef}
+            fullWidth
+            placeholder="Search"
+            sx={{
+              border: "1px solid",
+              borderColor: "primary.main",
+              borderRadius: 1,
+              px: 2,
+              py: 1,
+            }}
+          />
+        </Box>
       )}
 
-      {/* Drawer (Hamburger Menu) for Mobile */}
+      {/* Mobile Drawer */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         <Box
           sx={{ width: 250 }}
@@ -156,16 +187,18 @@ export default function Header() {
           onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
-          {/* Logo inside Drawer */}
-          <Box className="flex justify-center py-4">
+          <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
             <Link href="/" passHref>
-              <img src="/logo.jpg" alt="MyLogo" className="h-10" />
+              <img
+                src="/oneeye-removebg.png"
+                alt="Logo"
+                style={{ height: "40px", cursor: "pointer" }}
+              />
             </Link>
           </Box>
-
           <List>
             {links.map((link) => (
-              <ListItem button key={link.href}>
+              <ListItem key={link.href} disablePadding>
                 <Link href={link.href} passHref>
                   <ListItemText primary={link.label} />
                 </Link>
@@ -174,6 +207,6 @@ export default function Header() {
           </List>
         </Box>
       </Drawer>
-    </div>
+    </AppBar>
   );
 }

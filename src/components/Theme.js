@@ -3,28 +3,18 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#113065", // Customize primary color
+      main: "#113065",
     },
     secondary: {
-      main: "#FFC107", // Customize secondary color
+      main: "#EAE2C6",
+      sec: "#F9F9F3",
     },
     background: {
-      default: "#FFFFFF",
+      default: "#ffffff",
     },
   },
   typography: {
-    fontFamily: "Arial, sans-serif",
-  },
-  components: {
-    // You can customize Material UI components globally here (e.g. Button, AppBar)
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          padding: "8px 16px",
-        },
-      },
-    },
+    fontFamily: "'Poppins', sans-serif",
   },
 });
 
