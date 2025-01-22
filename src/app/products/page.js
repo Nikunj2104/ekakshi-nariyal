@@ -98,7 +98,7 @@ const ProductDetail = () => {
               variant="h4"
               component="h1"
               sx={{
-                fontWeight: "bold",
+                fontWeight: "500",
                 color: "primary.main",
                 marginBottom: 2,
               }}
@@ -111,13 +111,13 @@ const ProductDetail = () => {
             </Typography>
             <Typography variant="h6">
               Price:{" "}
-              <span style={{ color: "#113065", fontWeight: "bold" }}>
+              <span style={{ color: "#113065", fontWeight: "500" }}>
                 1000 INR
               </span>
             </Typography>
-            <Typography variant="h6" sx={{ mb: 2 }}>
+            <Typography variant="body1" sx={{ mb: 2 }}>
               Weight:{" "}
-              <span style={{ color: "#113065", fontWeight: "bold" }}>
+              <span style={{ color: "#113065", fontWeight: "500" }}>
                 500 gm
               </span>
             </Typography>
@@ -148,7 +148,7 @@ const ProductDetail = () => {
 
         {/* Reviews Section */}
         <div className="mt-12">
-          <Typography variant="h5" sx={{ color: "primary.main", mb: 6 }}>
+          <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
             Customer Reviews
           </Typography>
 
@@ -212,7 +212,7 @@ const ProductDetail = () => {
 
         {/* Add Review Section */}
         <div className="mt-12">
-          <Typography variant="h5" sx={{ color: "primary.main", mb: 6 }}>
+          <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
             Add Your Review
           </Typography>
           <form onSubmit={handleReviewSubmit} className="space-y-4">

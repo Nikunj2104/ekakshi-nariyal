@@ -81,11 +81,15 @@ export default function Header() {
           <Typography
             variant="h6"
             component="span"
-            sx={{ fontWeight: 600, fontSize: "0.9rem", color: "primary.main" }}
+            sx={{
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              color: "primary.main",
+              lineHeight: 1.3,
+            }}
           >
-            One Eye
-            <br />
-            Coconut
+            <span style={{ display: "block" }}>One Eye</span>
+            <span style={{ display: "block" }}>Coconut</span>
           </Typography>
         </Box>
 
@@ -101,7 +105,14 @@ export default function Header() {
         </Box>
 
         {/* Action Icons */}
-        <Box display="flex" alignItems="center" gap={2}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: { xs: 0.5, md: 2 },
+            alignItems: "center",
+            marginLeft: "16px",
+          }}
+        >
           {/* Search Icon (Mobile) */}
           <IconButton
             color="primary"
@@ -119,7 +130,7 @@ export default function Header() {
               backgroundColor: "background.default",
               borderRadius: 1,
               px: 2,
-              py: 1,
+              py: 0.7,
               width: "200px",
               "&:hover": {
                 boxShadow: 2,
@@ -130,9 +141,9 @@ export default function Header() {
           />
 
           <Link href="/login" passHref>
-            <Button color="primary">
-              <Person sx={{ marginRight: 1 }} />
-            </Button>
+            <IconButton color="primary">
+              <Person />
+            </IconButton>
           </Link>
 
           <IconButton color="primary">
@@ -198,7 +209,7 @@ export default function Header() {
           </Box>
           <List>
             {links.map((link) => (
-              <ListItem key={link.href} disablePadding>
+              <ListItem key={link.href} disablePadding sx={{ paddingLeft: 2 }}>
                 <Link href={link.href} passHref>
                   <ListItemText primary={link.label} />
                 </Link>
