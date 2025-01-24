@@ -76,7 +76,7 @@ const ProductDetail = () => {
   return (
     <Box
       className="min-h-screen py-8"
-      sx={{ backgroundColor: "secondary.sec" }}
+      sx={{ backgroundColor: "background.secondary" }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Product Details */}
@@ -103,7 +103,8 @@ const ProductDetail = () => {
                 marginBottom: 2,
               }}
             >
-              Product Title
+              <span style={{ display: "block" }}>Ekakshi Nariyal</span>
+              <span style={{ display: "block" }}>(One Eyed Coconut)</span>
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>
               Description of the product goes here. It provides detailed
@@ -112,7 +113,7 @@ const ProductDetail = () => {
             <Typography variant="h6">
               Price:{" "}
               <span style={{ color: "#113065", fontWeight: "500" }}>
-                1000 INR
+                12,000 INR
               </span>
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>

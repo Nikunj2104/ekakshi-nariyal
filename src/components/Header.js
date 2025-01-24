@@ -24,9 +24,9 @@ export default function Header() {
 
   const links = [
     { href: "/", label: "Home" },
-    { href: "/products", label: "Products" },
-    { href: "/about-us", label: "About Us" },
-    { href: "/contact-us", label: "Contact Us" },
+    // { href: "/products", label: "Products" },
+    { href: "/about-us", label: "About" },
+    { href: "/contact-us", label: "Contact" },
   ];
 
   const toggleDrawer = (open) => (event) => {
@@ -127,7 +127,7 @@ export default function Header() {
             ref={searchInputRef}
             sx={{
               display: { xs: "none", md: "flex" },
-              backgroundColor: "background.default",
+              backgroundColor: "background.white",
               borderRadius: 1,
               px: 2,
               py: 0.7,
@@ -169,7 +169,7 @@ export default function Header() {
             top: "56px",
             left: 0,
             width: "100%",
-            bgcolor: "background.default",
+            bgcolor: "background.white",
             boxShadow: 2,
             px: 2,
             py: 1,
