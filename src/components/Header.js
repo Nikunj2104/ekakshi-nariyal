@@ -140,7 +140,7 @@ export default function Header() {
             startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
           />
 
-          <Link href="/login" passHref>
+          <Link href="/sign-in" passHref>
             <IconButton color="primary">
               <Person />
             </IconButton>
