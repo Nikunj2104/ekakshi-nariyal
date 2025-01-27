@@ -5,6 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "@/components/Header";
 import theme from "@/components/Theme";
 import "./globals.css"; // Tailwind or global styles
+import { Provider } from "react-redux";
+import { store } from "@/redux/store";
 
 export default function RootLayout({ children }) {
   return (
@@ -29,13 +31,15 @@ export default function RootLayout({ children }) {
       </head>
 
       <body>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline ensures Material-UI's styles reset */}
-          <CssBaseline />
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline ensures Material-UI's styles reset */}
+            <CssBaseline />
 
-          <Header />
-          <main>{children}</main>
-        </ThemeProvider>
+            <Header />
+            <main>{children}</main>
+          </ThemeProvider>
+        </Provider>
       </body>
     </html>
   );

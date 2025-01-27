@@ -16,11 +16,19 @@ import {
 import { Person, Search, ShoppingCart, Menu } from "@mui/icons-material";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInputRef = useRef(null);
+  const { isLoggedIn, userName } = useSelector((state) => state.auth); // Access state from Redux
+
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch logout action
+  };
 
   const links = [
     { href: "/", label: "Home" },
@@ -142,7 +150,7 @@ export default function Header() {
 
           <Link href="/sign-in" passHref>
             <IconButton color="primary">
-              <Person />
+              {isLoggedIn ? "bhajju" : <Person />}
             </IconButton>
           </Link>
 
