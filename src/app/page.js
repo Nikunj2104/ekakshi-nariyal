@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useState } from "react";
 import {
   Card,
@@ -10,9 +11,8 @@ import {
   Box,
   TextField,
 } from "@mui/material";
-import Image from "next/image";
 
-const ProductDetail = () => {
+const Home = () => {
   const initialReviews = [
     { id: 1, reviewer: "John Doe", rating: 5, comment: "Great product!" },
     { id: 2, reviewer: "Jane Smith", rating: 4, comment: "Very useful!" },
@@ -89,6 +89,8 @@ const ProductDetail = () => {
               width={500}
               height={500}
               className="object-cover"
+              style={{ width: "100%", height: "auto" }}
+              priority
             />
           </div>
 
@@ -267,4 +269,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default Home;

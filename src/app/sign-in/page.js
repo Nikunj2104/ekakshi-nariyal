@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/compat/router";
 import Link from "next/link";
-import { TextField, Button, Container, Typography } from "@mui/material";
-import API from "../../../utils/axios";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { TextField, Button, Container, Typography } from "@mui/material";
 import { login } from "@/redux/actions/authActions";
+import API from "../../../utils/axios";
 
 const Signin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -18,8 +18,7 @@ const Signin = () => {
   // Check if the user is logged in when the component mounts
   useEffect(() => {
     if (isLoggedIn) {
-      // router is undefined here
-      // router.push("/");
+      router.push("/");
     }
   }, [router]);
 
@@ -28,9 +27,7 @@ const Signin = () => {
     try {
       const { data } = await API.post("/auth/sign-in", form);
       dispatch(login(data.user.name)); // Dispatch the login action with the user's name
-      alert("Login successful");
-      // router is undefined here
-      // router.push("/");
+      router.push("/");
     } catch (error) {
       console.error(error);
     }

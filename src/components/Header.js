@@ -1,5 +1,7 @@
-"use client";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AppBar,
   Toolbar,
@@ -12,27 +14,59 @@ import {
   ListItem,
   ListItemText,
   Typography,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import { Person, Search, ShoppingCart, Menu } from "@mui/icons-material";
-import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  Person,
+  Search,
+  ShoppingCart,
+  Menu as MenuIcon,
+} from "@mui/icons-material";
+import { logout } from "@/redux/actions/authActions";
 
 export default function Header() {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { isLoggedIn, userName } = useSelector((state) => state.auth);
+
+  const [isClient, setIsClient] = useState(false); // Initialize client-side check
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const searchInputRef = useRef(null);
-  const { isLoggedIn, userName } = useSelector((state) => state.auth); // Access state from Redux
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const dispatch = useDispatch();
+  const searchInputRef = useRef(null);
+
+  useEffect(() => {
+    setIsClient(true); // Set isClient to true after component has mounted
+  }, []);
+
+  // To be removed
+  useEffect(() => {
+    console.log("useEffect Current auth state:", { isLoggedIn, userName });
+  }, [isLoggedIn, userName]);
 
   const handleLogout = () => {
-    dispatch(logout()); // Dispatch logout action
+    dispatch(logout());
+    setAnchorEl(null);
+    router.push("/sign-in");
+  };
+
+  const handleProfileClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfile = () => {
+    router.push("/profile");
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const links = [
     { href: "/", label: "Home" },
-    // { href: "/products", label: "Products" },
     { href: "/about-us", label: "About" },
     { href: "/contact-us", label: "Contact" },
   ];
@@ -73,6 +107,14 @@ export default function Header() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // To be removed
+  console.log("other Current auth state:", { isLoggedIn, userName });
+  console.log(isClient);
+
+  if (!isClient) {
+    return null; // Prevent rendering until the client-side is ready
+  }
 
   return (
     <AppBar position="sticky" color="secondary" sx={{ boxShadow: 1 }}>
@@ -148,15 +190,21 @@ export default function Header() {
             startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
           />
 
-          <Link href="/sign-in" passHref>
-            <IconButton color="primary">
-              {isLoggedIn ? "bhajju" : <Person />}
-            </IconButton>
-          </Link>
-
           <IconButton color="primary">
             <ShoppingCart />
           </IconButton>
+
+          {isLoggedIn ? (
+            <IconButton color="primary" onClick={handleProfileClick}>
+              <Person />
+            </IconButton>
+          ) : (
+            <Link href="/sign-in" passHref>
+              <IconButton color="primary">
+                <Person />
+              </IconButton>
+            </Link>
+          )}
 
           {/* Hamburger Menu */}
           <IconButton
@@ -164,10 +212,22 @@ export default function Header() {
             onClick={toggleDrawer(true)}
             sx={{ display: { xs: "block", md: "none" } }}
           >
-            <Menu />
+            <MenuIcon />
           </IconButton>
         </Box>
       </Toolbar>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "profile-menu",
+        }}
+      >
+        <MenuItem onClick={handleProfile}>Profile</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
 
       {/* Mobile Search Bar */}
       {searchOpen && (

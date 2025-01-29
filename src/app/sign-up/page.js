@@ -1,18 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TextField, Button, Container, Typography } from "@mui/material";
 import API from "../../../utils/axios";
 
 const Signup = () => {
+  const router = useRouter();
+
   const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await API.post("/auth/sign-up", form);
-      alert(data.message);
+      await API.post("/auth/sign-up", form);
+      router.push("/sign-in");
     } catch (error) {
       console.error(error.response.data.message);
       alert(error.response.data.message);
