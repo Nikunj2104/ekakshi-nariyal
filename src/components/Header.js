@@ -21,6 +21,7 @@ import {
   Person,
   Search,
   ShoppingCart,
+  ExitToApp,
   Menu as MenuIcon,
 } from "@mui/icons-material";
 import { logout } from "@/redux/actions/authActions";
@@ -40,11 +41,6 @@ export default function Header() {
   useEffect(() => {
     setIsClient(true); // Set isClient to true after component has mounted
   }, []);
-
-  // To be removed
-  useEffect(() => {
-    console.log("useEffect Current auth state:", { isLoggedIn, userName });
-  }, [isLoggedIn, userName]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -108,10 +104,6 @@ export default function Header() {
     };
   }, []);
 
-  // To be removed
-  console.log("other Current auth state:", { isLoggedIn, userName });
-  console.log(isClient);
-
   if (!isClient) {
     return null; // Prevent rendering until the client-side is ready
   }
@@ -123,7 +115,7 @@ export default function Header() {
         <Box display="flex" alignItems="center" gap={2}>
           <Link href="/" passHref>
             <img
-              src="/oneeye-removebg.png"
+              src="/one-eye-logo.webp"
               alt="Logo"
               style={{ height: "40px", cursor: "pointer" }}
             />
@@ -190,10 +182,6 @@ export default function Header() {
             startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
           />
 
-          <IconButton color="primary">
-            <ShoppingCart />
-          </IconButton>
-
           {isLoggedIn ? (
             <IconButton color="primary" onClick={handleProfileClick}>
               <Person />
@@ -224,9 +212,48 @@ export default function Header() {
         MenuListProps={{
           "aria-labelledby": "profile-menu",
         }}
+        sx={{
+          mt: 1.5,
+        }}
       >
-        <MenuItem onClick={handleProfile}>Profile</MenuItem>
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem
+          onClick={handleProfile}
+          sx={{
+            padding: "10px 20px",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.08)",
+            },
+          }}
+        >
+          <Person sx={{ mr: 1 }} />
+          Profile
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => router.push("/cart")}
+          sx={{
+            padding: "10px 20px",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.08)",
+            },
+          }}
+        >
+          <ShoppingCart sx={{ mr: 1 }} />
+          Cart
+        </MenuItem>
+
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            padding: "10px 20px",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.08)",
+            },
+          }}
+        >
+          <ExitToApp sx={{ mr: 1 }} />
+          Logout
+        </MenuItem>
       </Menu>
 
       {/* Mobile Search Bar */}
@@ -269,7 +296,7 @@ export default function Header() {
           <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
             <Link href="/" passHref>
               <img
-                src="/oneeye-removebg.png"
+                src="/oneeye-removebg.webp"
                 alt="Logo"
                 style={{ height: "40px", cursor: "pointer" }}
               />

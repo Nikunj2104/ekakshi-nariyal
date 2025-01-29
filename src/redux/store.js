@@ -2,6 +2,13 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Default is localStorage
 
+// Manually create a noop storage for SSR
+const noopStorage = {
+  getItem: () => Promise.resolve(null),
+  setItem: () => Promise.resolve(),
+  removeItem: () => Promise.resolve(),
+};
+
 // Authentication reducer
 const authReducer = (state = { isLoggedIn: false, userName: "" }, action) => {
   switch (action.type) {
@@ -22,7 +29,7 @@ const rootReducer = combineReducers({
 // Redux Persist configuration
 const persistConfig = {
   key: "root",
-  storage, // LocalStorage by default
+  storage: typeof window !== "undefined" ? storage : noopStorage, // Use noopStorage on the server side
   whitelist: ["auth"], // Persist only the 'auth' state
 };
 

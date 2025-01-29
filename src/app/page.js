@@ -84,13 +84,11 @@ const Home = () => {
           {/* Left side: Product image */}
           <div className="flex-1 border border-gray-200 rounded-lg overflow-hidden">
             <Image
-              src="/one-eye-coconut.jpg"
+              src="/one-eye-coconut.webp"
               alt="Product Image"
               width={500}
               height={500}
               className="object-cover"
-              style={{ width: "100%", height: "auto" }}
-              priority
             />
           </div>
 
