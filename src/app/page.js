@@ -80,7 +80,7 @@ const Home = () => {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Product Details */}
-        <div className="flex flex-col md:flex-row gap-8 items-start bg-white shadow-lg rounded-lg p-6">
+        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start bg-white shadow-lg rounded-lg p-6">
           {/* Left side: Product image */}
           <div className="flex-1 border border-gray-200 rounded-lg overflow-hidden">
             <Image
@@ -101,10 +101,14 @@ const Home = () => {
                 fontWeight: "500",
                 color: "primary.main",
                 marginBottom: 2,
+                fontSize: {
+                  xs: "1.75rem",
+                  sm: "2.25rem",
+                },
               }}
             >
               <span style={{ display: "block" }}>Ekakshi Nariyal</span>
-              <span style={{ display: "block" }}>(One Eyed Coconut)</span>
+              <span style={{ display: "block" }}>One Eyed Coconut</span>
             </Typography>
             <Typography variant="body1" sx={{ mb: 2 }}>
               Description of the product goes here. It provides detailed

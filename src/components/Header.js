@@ -16,6 +16,7 @@ import {
   Typography,
   Menu,
   MenuItem,
+  useTheme,
 } from "@mui/material";
 import {
   Person,
@@ -27,6 +28,7 @@ import {
 import { logout } from "@/redux/actions/authActions";
 
 export default function Header() {
+  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
   const { isLoggedIn, userName } = useSelector((state) => state.auth);
@@ -213,7 +215,10 @@ export default function Header() {
           "aria-labelledby": "profile-menu",
         }}
         sx={{
-          mt: 1.5,
+          mt: {
+            xs: 1.2,
+            sm: 1.6,
+          },
         }}
       >
         <MenuItem
@@ -296,7 +301,7 @@ export default function Header() {
           <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
             <Link href="/" passHref>
               <img
-                src="/oneeye-removebg.webp"
+                src="/one-eye-logo.webp"
                 alt="Logo"
                 style={{ height: "40px", cursor: "pointer" }}
               />
