@@ -89,6 +89,7 @@ const Home = () => {
               width={500}
               height={500}
               className="object-cover"
+              priority
             />
           </div>
 
