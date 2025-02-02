@@ -1,0 +1,258 @@
+{
+  "products": [
+    {
+      "id": "79",
+      "title": "Ekakshi Nariyal (One Eyed Coconut)",
+      "slug": "ekakshi-nariyal-one-eyed-coconut",
+      "description": "Your product's full description Your product's full description Your product's full description Your product's full description",
+      "price": "12,000",
+      "mrp": "50,000",
+      "weight": "500 gm",
+      "code": "PTC079",
+      "image": "/one-eye-coconut.webp",
+      "limitedDeal": "Limited Time Deal",
+      "averageReview": "4",
+      "discount": "50",
+      "reviews": [
+        {
+          "id": 1,
+          "reviewer": "John Doe",
+          "rating": 5,
+          "comment": "Great product!"
+        },
+        {
+          "id": 2,
+          "reviewer": "Jane Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 3,
+          "reviewer": "Alice Brown",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        },
+        {
+          "id": 4,
+          "reviewer": "Jane D Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 5,
+          "reviewer": "Alice V Brown",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        }
+      ]
+    },
+    {
+      "id": "80",
+      "title": "Domukhi Nariyal (Two Eyed Coconut)",
+      "slug": "eomukhi-nariyal-owo-eyed-coconut",
+      "description": "Your product's full description",
+      "price": "8,000",
+      "mrp": "50,000",
+      "weight": "450 gm",
+      "code": "PTC080",
+      "image": "/one-eye-coconut.webp",
+      "limitedDeal": "Limited Time Deal",
+      "averageReview": "4",
+      "discount": "50",
+      "reviews": [
+        {
+          "id": 1,
+          "reviewer": "John R Doe",
+          "rating": 5,
+          "comment": "Great product!"
+        },
+        {
+          "id": 2,
+          "reviewer": "Jane K Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 3,
+          "reviewer": "Alice Dave",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        },
+        {
+          "id": 4,
+          "reviewer": "Sam Wilson",
+          "rating": 3,
+          "comment": "It works well."
+        },
+        {
+          "id": 5,
+          "reviewer": "Bob Johnson",
+          "rating": 2,
+          "comment": "Not what I expected."
+        },
+        {
+          "id": 6,
+          "reviewer": "Chris Lee",
+          "rating": 4,
+          "comment": "Good value for money."
+        }
+      ]
+    },
+    {
+      "id": "81",
+      "title": "Domukhi Nariyal (Two Eyed Coconut)",
+      "slug": "eomukhi-nariyal-owo-eyed-coconut",
+      "description": "Your product's full description",
+      "price": "8,000",
+      "mrp": "50,000",
+      "weight": "450 gm",
+      "code": "PTC081",
+      "image": "/one-eye-coconut.webp",
+      "limitedDeal": "Limited Time Deal",
+      "averageReview": "4",
+      "discount": "50",
+      "reviews": [
+        {
+          "id": 1,
+          "reviewer": "John R Doe",
+          "rating": 5,
+          "comment": "Great product!"
+        },
+        {
+          "id": 2,
+          "reviewer": "Jane K Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 3,
+          "reviewer": "Alice Dave",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        },
+        {
+          "id": 4,
+          "reviewer": "Sam Wilson",
+          "rating": 3,
+          "comment": "It works well."
+        },
+        {
+          "id": 5,
+          "reviewer": "Bob Johnson",
+          "rating": 2,
+          "comment": "Not what I expected."
+        },
+        {
+          "id": 6,
+          "reviewer": "Chris Lee",
+          "rating": 4,
+          "comment": "Good value for money."
+        }
+      ]
+    },
+    {
+      "id": "82",
+      "title": "Domukhi Nariyal (Two Eyed Coconut)",
+      "slug": "eomukhi-nariyal-owo-eyed-coconut",
+      "description": "Your product's full description",
+      "price": "8,000",
+      "mrp": "50,000",
+      "weight": "450 gm",
+      "code": "PTC082",
+      "image": "/one-eye-coconut.webp",
+      "limitedDeal": "Limited Time Deal",
+      "averageReview": "4",
+      "discount": "50",
+      "reviews": [
+        {
+          "id": 1,
+          "reviewer": "John R Doe",
+          "rating": 5,
+          "comment": "Great product!"
+        },
+        {
+          "id": 2,
+          "reviewer": "Jane K Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 3,
+          "reviewer": "Alice Dave",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        },
+        {
+          "id": 4,
+          "reviewer": "Sam Wilson",
+          "rating": 3,
+          "comment": "It works well."
+        },
+        {
+          "id": 5,
+          "reviewer": "Bob Johnson",
+          "rating": 2,
+          "comment": "Not what I expected."
+        },
+        {
+          "id": 6,
+          "reviewer": "Chris Lee",
+          "rating": 4,
+          "comment": "Good value for money."
+        }
+      ]
+    },
+    {
+      "id": "83",
+      "title": "Domukhi Nariyal (Two Eyed Coconut)",
+      "slug": "eomukhi-nariyal-owo-eyed-coconut",
+      "description": "Your product's full description",
+      "price": "8,000",
+      "mrp": "50,000",
+      "weight": "450 gm",
+      "code": "PTC083",
+      "image": "/one-eye-coconut.webp",
+      "limitedDeal": "Limited Time Deal",
+      "averageReview": "4",
+      "discount": "50",
+      "reviews": [
+        {
+          "id": 1,
+          "reviewer": "John R Doe",
+          "rating": 5,
+          "comment": "Great product!"
+        },
+        {
+          "id": 2,
+          "reviewer": "Jane K Smith",
+          "rating": 4,
+          "comment": "Very useful!"
+        },
+        {
+          "id": 3,
+          "reviewer": "Alice Dave",
+          "rating": 5,
+          "comment": "Exceeded expectations!"
+        },
+        {
+          "id": 4,
+          "reviewer": "Sam Wilson",
+          "rating": 3,
+          "comment": "It works well."
+        },
+        {
+          "id": 5,
+          "reviewer": "Bob Johnson",
+          "rating": 2,
+          "comment": "Not what I expected."
+        },
+        {
+          "id": 6,
+          "reviewer": "Chris Lee",
+          "rating": 4,
+          "comment": "Good value for money."
+        }
+      ]
+    }
+  ]
+}

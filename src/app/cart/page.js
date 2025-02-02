@@ -10,7 +10,7 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import ProductDetails from "@/components/ProductDetails";
+import ProductDetails from "@/components/ProductDetailsBox";
 import { clearCart, updateCartItemQuantity } from "@/redux/actions/authActions";
 
 const Cart = () => {

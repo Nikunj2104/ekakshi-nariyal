@@ -35,11 +35,13 @@ const RazorpayButton = () => {
         backgroundColor: "secondary.main",
         color: "primary.main",
         fontWeight: "bold",
+        width: "100%",
+        textTransform: "none",
+        transition: "background-color 0.3s ease, color 0.3s ease",
         "&:hover": {
           backgroundColor: "primary.main",
           color: "white",
         },
-        transition: "background-color 0.3s ease, color 0.3s ease",
       }}
     >
       Buy Now

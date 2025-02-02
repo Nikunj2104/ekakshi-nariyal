@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
 import RazorpayButton from "@/components/RazorpayButton";
-import ProductDetails from "@/components/ProductDetails";
+import ProductDetails from "@/components/ProductDetailsBox";
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
