@@ -14,36 +14,74 @@ const authReducer = (state = { isLoggedIn: false, userName: "" }, action) => {
   switch (action.type) {
     case "LOGIN":
       return { ...state, isLoggedIn: true, userName: action.payload.userName };
+
     case "LOGOUT":
       return { ...state, isLoggedIn: false, userName: "" };
+
     default:
       return state;
   }
 };
 
-// Combine reducers (if you have more reducers)
+// Cart reducer
+const cartReducer = (state = { items: [] }, action) => {
+  switch (action.type) {
+    case "ADD_TO_CART":
+      return {
+        ...state,
+        items: [...state.items, { ...action.payload, quantity: 1 }],
+      };
+
+    case "REMOVE_FROM_CART":
+      return {
+        ...state,
+        items: state.items.filter((item) => item.id !== action.payload.id),
+      };
+
+    case "UPDATE_CART_ITEM_QUANTITY":
+      return {
+        ...state,
+        items: state.items.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, quantity: item.quantity + action.payload.amount }
+            : item
+        ),
+      };
+
+    case "CLEAR_CART":
+      return {
+        ...state,
+        items: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
+  cart: cartReducer,
 });
 
 // Redux Persist configuration
 const persistConfig = {
   key: "root",
   storage: typeof window !== "undefined" ? storage : noopStorage, // Use noopStorage on the server side
-  whitelist: ["auth"], // Persist only the 'auth' state
+  whitelist: ["auth", "cart"], // Persist auth and cart states
 };
 
 // Create persisted reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// Use Redux Toolkit's configureStore with serializableCheck turned off
+// Configure store
 const store = configureStore({
-  reducer: persistedReducer, // Use the persisted reducer
+  reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production", // Enable DevTools in development
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        // Ignore actions with non-serializable values, like the ones used by redux-persist
         ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
       },
     }),

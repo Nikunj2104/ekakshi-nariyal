@@ -10,10 +10,30 @@ import {
   Rating,
   Box,
   TextField,
+  Snackbar,
+  Alert,
 } from "@mui/material";
+import RazorpayButton from "@/components/RazorpayButton";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "@/redux/actions/authActions";
 
 const Home = () => {
-  const initialReviews = [
+  const [products] = useState([
+    {
+      id: "product-123",
+      title: "Ekakshi Nariyal (One Eyed Coconut)",
+      price: 12000,
+      weight: "500 gm",
+      code: "PTC079",
+      image: "/one-eye-coconut.webp",
+    },
+  ]);
+
+  const dispatch = useDispatch();
+
+  const cartItems = useSelector((state) => state.cart.items);
+
+  const [reviews, setReviews] = useState([
     { id: 1, reviewer: "John Doe", rating: 5, comment: "Great product!" },
     { id: 2, reviewer: "Jane Smith", rating: 4, comment: "Very useful!" },
     { id: 3, reviewer: "Sam Wilson", rating: 3, comment: "It works well." },
@@ -35,29 +55,37 @@ const Home = () => {
       rating: 4,
       comment: "Good value for money.",
     },
-  ];
+  ]);
 
-  const [reviews, setReviews] = useState(initialReviews);
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const [cart, setCart] = useState([]);
   const [newReview, setNewReview] = useState({
     reviewer: "",
     rating: 0,
     comment: "",
   });
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // For custom snackbar message
+
+  const handleAddToCart = (product) => {
+    // Check if the product is already in the cart
+    const isProductInCart = cartItems?.some((item) => item.id === product.id);
+
+    if (isProductInCart) {
+      setSnackbarMessage("Product is already added to cart!");
+    } else {
+      dispatch(addToCart(product)); // Dispatch the addToCart action
+      setSnackbarMessage("Product added to cart!"); // Show success message
+    }
+
+    setOpenSnackbar(true); // Open the Snackbar with the appropriate message
+  };
+
   const toggleReviews = () => {
     setShowAllReviews(!showAllReviews);
   };
 
   const reviewsToShow = showAllReviews ? reviews : reviews.slice(0, 3);
-
-  const handleAddToCart = () => {
-    setCart([
-      ...cart,
-      { id: "product-123", title: "Product Title", price: 100 },
-    ]);
-  };
 
   const handleReviewSubmit = (e) => {
     e.preventDefault();
@@ -79,80 +107,82 @@ const Home = () => {
       sx={{ backgroundColor: "background.secondary" }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Product Details */}
-        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start bg-white shadow-lg rounded-lg p-6">
-          {/* Left side: Product image */}
-          <div className="flex-1 border border-gray-200 rounded-lg overflow-hidden">
-            <Image
-              src="/one-eye-coconut.webp"
-              alt="Product Image"
-              width={500}
-              height={500}
-              className="object-cover"
-              priority
-            />
-          </div>
-
-          {/* Right side: Product details */}
-          <div className="flex-1">
-            <Typography
-              variant="h4"
-              component="h1"
-              sx={{
-                fontWeight: "500",
-                color: "primary.main",
-                marginBottom: 2,
-                fontSize: {
-                  xs: "1.75rem",
-                  sm: "2.25rem",
-                },
-              }}
-            >
-              <span style={{ display: "block" }}>Ekakshi Nariyal</span>
-              <span style={{ display: "block" }}>One Eyed Coconut</span>
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Description of the product goes here. It provides detailed
-              information about the product.
-            </Typography>
-            <Typography variant="h6">
-              Price:{" "}
-              <span style={{ color: "#113065", fontWeight: "500" }}>
-                12,000 INR
-              </span>
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Weight:{" "}
-              <span style={{ color: "#113065", fontWeight: "500" }}>
-                500 gm
-              </span>
-            </Typography>
-
-            <Typography variant="body1" sx={{ mb: 3 }}>
-              Product Code:{" "}
-              <span className="text-gray-800 font-medium">PTC079</span>
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddToCart}
-              sx={{
-                backgroundColor: "primary.main",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "secondary.main",
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="flex flex-col md:flex-row gap-8 items-center md:items-start bg-white shadow-lg rounded-lg p-6"
+          >
+            <div className="flex-1 border border-gray-200 rounded-lg overflow-hidden">
+              <Image
+                src={product.image}
+                alt={product.title}
+                width={500}
+                height={500}
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="flex-1">
+              <Typography
+                variant="h4"
+                component="h1"
+                sx={{
+                  fontWeight: "500",
                   color: "primary.main",
-                  fontWeight: "bold",
-                },
-                transition: "background-color 0.3s ease, color 0.3s ease",
-              }}
-            >
-              Add to Cart
-            </Button>
+                  mb: 2,
+                  fontSize: {
+                    xs: "1.75rem",
+                    sm: "2.25rem",
+                  },
+                }}
+              >
+                {product.title}
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Description of the product goes here.
+              </Typography>
+              <Typography variant="h6">
+                Price:{" "}
+                <span style={{ color: "#113065", fontWeight: "500" }}>
+                  {product.price} INR
+                </span>
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Weight:{" "}
+                <span style={{ color: "#113065", fontWeight: "500" }}>
+                  {product.weight}
+                </span>
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 3 }}>
+                Product Code:{" "}
+                <span className="text-gray-800 font-medium">
+                  {product.code}
+                </span>
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleAddToCart(product)}
+                sx={{
+                  backgroundColor: "primary.main",
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: "secondary.main",
+                    color: "primary.main",
+                    fontWeight: "bold",
+                  },
+                  transition: "background-color 0.3s ease, color 0.3s ease",
+                  mr: 2,
+                }}
+              >
+                Add to Cart
+              </Button>
+              <RazorpayButton />
+            </div>
           </div>
-        </div>
+        ))}
 
-        {/* Reviews Section */}
+        {/* Customer Reviews Section */}
         <div className="mt-12">
           <Typography variant="h5" sx={{ color: "primary.main", mb: 2 }}>
             Customer Reviews
@@ -267,6 +297,17 @@ const Home = () => {
             </Button>
           </form>
         </div>
+
+        {/* Snackbar for Add to Cart */}
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenSnackbar(false)}
+        >
+          <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+            {snackbarMessage} {/* Display dynamic message */}
+          </Alert>
+        </Snackbar>
       </div>
     </Box>
   );
