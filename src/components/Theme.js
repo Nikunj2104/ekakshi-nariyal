@@ -12,6 +12,13 @@ const theme = createTheme({
       white: "#FFFFFF",
       secondary: "#F9F9F3",
     },
+    text: {
+      primary: "#000000",
+      secondary: "#ADB5BD",
+    },
+    star: {
+      primary: "#DE7921",
+    },
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",

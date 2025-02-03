@@ -1,54 +1,48 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
-import { Box, Typography, Button, Rating, TextField } from "@mui/material";
-import { useState } from "react";
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+import {
+  Box,
+  Typography,
+  Button,
+  Rating,
+  TextField,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 import RazorpayButton from "@/components/RazorpayButton";
-
-const renderStars = (rating) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-  const totalStars = 5;
-
-  return (
-    <div className="flex">
-      {[...Array(totalStars)].map((_, index) => {
-        if (index < fullStars) {
-          return <StarIcon key={index} sx={{ color: "#DE7921" }} />;
-        } else if (index === fullStars && hasHalfStar) {
-          return (
-            <StarIcon key={index} sx={{ color: "#DE7921", opacity: 0.5 }} />
-          );
-        } else {
-          return (
-            <StarBorderIcon
-              key={index}
-              sx={{ color: "#DE7921", opacity: 0.5 }}
-            />
-          );
-        }
-      })}
-    </div>
-  );
-};
+import Stars from "@/components/Stars";
+import { addToCart } from "@/redux/actions/authActions";
+import Message from "@/components/Message";
+import Loader from "@/components/Loader";
 
 const ProductDetail = () => {
-  const router = useRouter();
   const { slug } = useParams();
+  const dispatch = useDispatch();
 
-  // Fetch product data from Redux or JSON
+  const [isClient, setIsClient] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const products = useSelector((state) => state.cart.items);
+
+  useEffect(() => {
+    if (products) {
+      setLoading(false);
+    }
+  }, [products]);
+
   const product = products?.find((p) => p.slug === slug);
 
-  if (!product) {
-    return <Typography variant="h4">Product not found</Typography>;
-  }
-
-  const [reviews, setReviews] = useState(product.reviews);
+  const [reviews, setReviews] = useState(product.reviews || []);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [newReview, setNewReview] = useState({
     reviewer: "",
@@ -58,7 +52,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = (product) => {
     // Check if the product is already in the cart
-    const isProductInCart = cartItems?.some((item) => item.id === product.id);
+    const isProductInCart = products?.some((item) => item.id === product.id);
 
     if (isProductInCart) {
       setSnackbarMessage("Product is already added to cart!");
@@ -90,6 +84,23 @@ const ProductDetail = () => {
     }
   };
 
+  if (!isClient) {
+    return null; // Prevent rendering until the client-side is ready
+  }
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!product) {
+    return (
+      <Message
+        title="Product not found"
+        message="Please tell us what your are finding. We would love to get back to you!"
+      />
+    );
+  }
+
   return (
     <Box
       className="min-h-screen p-4"
@@ -99,14 +110,16 @@ const ProductDetail = () => {
         <div className="flex flex-col md:flex-row gap-4 items-center md:items-start bg-white shadow-lg rounded-lg p-4">
           {/* Image Section */}
           <div className="flex-1 md:w-1/2 rounded-lg overflow-hidden flex justify-center">
-            <Image
-              src={product.image}
-              alt={product.title}
-              width={500}
-              height={500}
-              className="object-cover"
-              priority
-            />
+            {product.image && (
+              <Image
+                src={product.image}
+                alt={product.title}
+                width={500}
+                height={500}
+                className="object-cover"
+                priority
+              />
+            )}
           </div>
 
           {/* Product Details Section */}
@@ -135,7 +148,7 @@ const ProductDetail = () => {
 
             {/* Add Rating and Price */}
             <div className="flex items-center mb-1">
-              {renderStars(parseFloat(product.averageReview))}
+              {Stars(parseFloat(product.averageReview))}
               <Typography variant="body2" sx={{ fontWeight: "500", ml: 1 }}>
                 {product.averageReview} / 5.0
               </Typography>
@@ -220,7 +233,7 @@ const ProductDetail = () => {
       </div>
 
       {/* Customer Reviews Section */}
-      <div className="mt-8">
+      <div className="mt-8 mx-4">
         <Typography
           variant="h5"
           sx={{
@@ -360,6 +373,16 @@ const ProductDetail = () => {
             Submit Review
           </Button>
         </form>
+
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenSnackbar(false)}
+        >
+          <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </div>
     </Box>
   );

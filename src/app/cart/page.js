@@ -1,7 +1,7 @@
 "use client";
 
-import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
   Card,
@@ -43,7 +43,7 @@ const Cart = () => {
 
   return (
     <Box className="min-h-screen py-8" sx={{ backgroundColor: "#f5f5f5" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Grid container spacing={4}>
           {/* Left Side - Cart Items (70%) */}
           <Grid item xs={12} md={8}>
