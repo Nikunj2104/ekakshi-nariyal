@@ -21,6 +21,7 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: "'Poppins', sans-serif",
+    navFont: { fontFamily: "'Macondo', cursive" },
   },
 });
 

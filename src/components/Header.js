@@ -117,7 +117,7 @@ export default function Header() {
         <Box display="flex" alignItems="center" gap={2}>
           <Link href="/" passHref>
             <img
-              src="/one-eye-logo.webp"
+              src="/thevedic.webp"
               alt="Logo"
               style={{ height: "40px", cursor: "pointer" }}
             />
@@ -127,13 +127,16 @@ export default function Header() {
             component="span"
             sx={{
               fontWeight: 600,
-              fontSize: "0.9rem",
+              fontSize: "1rem",
               color: "primary.main",
               lineHeight: 1.3,
+              letterSpacing: 0.5,
+              typography: "navFont",
+              mt: 0.4,
             }}
           >
-            <span style={{ display: "block" }}>One Eye</span>
-            <span style={{ display: "block" }}>Coconut</span>
+            <span style={{ display: "block" }}>The Vedic</span>
+            <span style={{ display: "block" }}>Wellness</span>
           </Typography>
         </Box>
 
@@ -305,7 +308,7 @@ export default function Header() {
           <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
             <Link href="/" passHref>
               <img
-                src="/one-eye-logo.webp"
+                src="/thevedic.webp"
                 alt="Logo"
                 style={{ height: "40px", cursor: "pointer" }}
               />
