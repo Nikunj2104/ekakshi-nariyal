@@ -140,11 +140,15 @@ export default function Header() {
         {/* Desktop Links */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, ml: "auto" }}>
           {links.map((link) => (
-            <Link key={link.href} href={link.href} passHref>
-              <Button color="primary" sx={{ fontWeight: 500 }}>
-                {link.label}
-              </Button>
-            </Link>
+            <Button
+              color="primary"
+              sx={{ fontWeight: 500 }}
+              component={Link}
+              key={link.href}
+              href={link.href}
+            >
+              {link.label}
+            </Button>
           ))}
         </Box>
 

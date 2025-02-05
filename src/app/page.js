@@ -3,44 +3,24 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Typography, Button, Box, Snackbar, Alert } from "@mui/material";
-import RazorpayButton from "@/components/RazorpayButton";
+import {
+  Typography,
+  Button,
+  Box,
+  Snackbar,
+  Alert,
+  Grid,
+  Card,
+  CardContent,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "@/redux/actions/authActions";
+import Stars from "@/components/Stars";
+import RazorpayButton from "@/components/RazorpayButton";
 import { products } from "@/json/products.json";
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-
-const renderStars = (rating) => {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 !== 0;
-  const totalStars = 5;
-
-  return (
-    <div className="flex">
-      {[...Array(totalStars)].map((_, index) => {
-        if (index < fullStars) {
-          return <StarIcon key={index} sx={{ color: "#DE7921" }} />;
-        } else if (index === fullStars && hasHalfStar) {
-          return (
-            <StarIcon key={index} sx={{ color: "#DE7921", opacity: 0.5 }} />
-          );
-        } else {
-          return (
-            <StarBorderIcon
-              key={index}
-              sx={{ color: "#DE7921", opacity: 0.5 }}
-            />
-          );
-        }
-      })}
-    </div>
-  );
-};
+import { addToCart } from "@/redux/actions/authActions";
 
 const Home = () => {
   const router = useRouter();
-
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -60,143 +40,211 @@ const Home = () => {
 
   return (
     <Box
-      className="min-h-screen py-8"
-      sx={{ backgroundColor: "background.secondary" }}
+      sx={{
+        minHeight: "100vh",
+        py: { xs: 0, xxs: 1.5, sm: 2, md: 4 },
+        backgroundColor: "background.secondary",
+      }}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6"
-          style={{
+      <Box sx={{ width: "100%", px: { xs: 0, xxs: 1.5, sm: 2, md: 4 } }}>
+        <Grid
+          container
+          gap={{ xs: 0, xxs: 1.5, sm: 2, md: 4 }}
+          sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gridTemplateColumns: {
+              xs: "repeat(auto-fit, minmax(175px, 1fr))",
+              xxs: "repeat(auto-fit, minmax(200px, 1fr))",
+              xmd: "repeat(auto-fit, minmax(275px, 1fr))",
+              md: "repeat(auto-fit, minmax(300px, 1fr))",
+            },
           }}
         >
           {products.map((product) => (
-            <div
+            <Grid
+              item
               key={product.id}
-              className="flex flex-col bg-white shadow-lg rounded-lg p-4 min-w-[300px]"
+              sx={{ display: "flex", justifyContent: "center" }}
             >
-              <div className="w-full">
-                <Image
-                  src={product.image}
-                  alt={product.title}
-                  width={500}
-                  height={500}
-                  className="w-full h-auto object-cover"
-                  priority
-                />
-              </div>
+              <Card
+                sx={{
+                  backgroundColor: "white",
+                  boxShadow: 3,
+                  borderRadius: { xs: 0, xxs: 2 },
+                  width: "100%",
+                  minWidth: {
+                    xs: 150,
+                    xxs: 200,
+                    xmd: 275,
+                    md: 300,
+                  },
+                }}
+              >
+                <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
+                  <Image
+                    src={product.image}
+                    alt={product.title}
+                    width={500}
+                    height={500}
+                    style={{ objectFit: "cover", borderRadius: 8 }}
+                    priority
+                  />
 
-              <div className="w-full mt-4">
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: "500",
-                    color: "primary.main",
-                    mb: 1,
-                  }}
-                  onClick={() => router.push(`/product-details/${product.slug}`)}
-                >
-                  {product.title}
-                </Typography>
+                  <Box sx={{ mt: 2 }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 500,
+                        color: "primary.main",
+                        cursor: "pointer",
+                        mb: 0.5,
+                        lineHeight: 1.3,
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 2,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        fontSize: {
+                          xs: "1.125rem",
+                          xxs: "1.25rem",
+                        },
+                      }}
+                      title={product.title}
+                      onClick={() =>
+                        router.push(`/product-details/${product.slug}`)
+                      }
+                    >
+                      {product.title}
+                    </Typography>
 
-                <Typography
-                  variant="body2"
-                  sx={{
-                    mb: 1,
-                    display: "-webkit-box",
-                    WebkitBoxOrient: "vertical",
-                    WebkitLineClamp: 2,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                  title={product.description}
-                >
-                  {product.description}
-                </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        mb: 1,
+                        display: { xs: "none", xxs: "-webkit-box" }, // Hide on mobile, show on larger screens
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: 2,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={product.description}
+                    >
+                      {product.description}
+                    </Typography>
 
-                <div className="flex items-center mb-1">
-                  {renderStars(parseFloat(product.averageReview))}
-                  <Typography variant="body2" sx={{ fontWeight: "500", ml: 1 }}>
-                    {product.averageReview} / 5.0
-                  </Typography>
-                </div>
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                      {Stars(parseFloat(product.averageReview))}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: "500",
+                          ml: 1,
+                          fontSize: {
+                            xs: "0.75rem",
+                            xxs: "0.875rem",
+                          },
+                        }}
+                      >
+                        {product.averageReview} / 5.0
+                      </Typography>
+                    </Box>
 
-                {product.limitedDeal && (
-                  <Button
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#CC0C39",
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      mt: 1,
-                      mb: 2,
-                      maxWidth: "70%",
-                      fontSize: "x-small",
-                      px: 1,
-                      py: 0.5,
-                      borderRadius: "2px",
-                      letterSpacing: "0.4px",
-                      "&:hover": { backgroundColor: "#A00A2E" },
-                    }}
-                  >
-                    Limited Time Deal
-                  </Button>
-                )}
+                    {product.limitedDeal && (
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: "#CC0C39",
+                          color: "white",
+                          fontWeight: "bold",
+                          textTransform: "none",
+                          mt: { xs: 0.5, xxs: 1 },
+                          mb: { xs: 1, xxs: 2 },
+                          maxWidth: "75%",
+                          fontSize: "x-small",
+                          px: 1,
+                          py: 0.5,
+                          borderRadius: "2px",
+                          letterSpacing: "0.4px",
+                          "&:hover": { backgroundColor: "#A00A2E" },
+                        }}
+                      >
+                        Limited Time Deal
+                      </Button>
+                    )}
 
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "600", color: "#113065" }}
-                >
-                  ₹{product.price}{" "}
-                  <span className="text-gray-500 text-sm">
-                    <span>M.R.P: </span>
-                    <span className="line-through">₹{product.mrp}</span>
-                  </span>
-                  <span className="text-green-600 text-sm font-bold">
-                    {" "}
-                    ({product.discount}% off)
-                  </span>
-                </Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: "600",
+                        color: "#113065",
+                        lineHeight: 1,
+                        fontSize: {
+                          xs: "1.125rem",
+                          xxs: "1.25rem",
+                        },
+                      }}
+                    >
+                      ₹{product.price}{" "}
+                      <Typography
+                        component="span"
+                        sx={{ color: "grey", fontSize: "small" }}
+                      >
+                        M.R.P: <s>₹{product.mrp}</s>
+                      </Typography>
+                      <Typography
+                        component="span"
+                        sx={{
+                          color: "green",
+                          fontWeight: "bold",
+                          fontSize: "small",
+                          ml: 0.5,
+                        }}
+                      >
+                        ({product.discount}% off)
+                      </Typography>
+                    </Typography>
 
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleAddToCart(product)}
-                  sx={{
-                    backgroundColor: "primary.main",
-                    color: "white",
-                    width: "100%",
-                    mb: 1,
-                    textTransform: "none",
-                    transition: "background-color 0.3s ease, color 0.3s ease",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                      color: "primary.main",
-                      fontWeight: "bold",
-                    },
-                  }}
-                >
-                  Add to Cart
-                </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleAddToCart(product)}
+                      sx={{
+                        backgroundColor: "primary.main",
+                        color: "white",
+                        width: "100%",
+                        my: { xs: 1, xxs: 1.5 },
+                        textTransform: "none",
+                        transition:
+                          "background-color 0.3s ease, color 0.3s ease",
+                        "&:hover": {
+                          backgroundColor: "secondary.main",
+                          color: "primary.main",
+                          fontWeight: "bold",
+                        },
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
 
-                <RazorpayButton />
-              </div>
-            </div>
+                    <RazorpayButton />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
           ))}
-        </div>
+        </Grid>
 
         <Snackbar
           open={openSnackbar}
           autoHideDuration={3000}
           onClose={() => setOpenSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
           <Alert onClose={() => setOpenSnackbar(false)} severity="success">
             {snackbarMessage}
           </Alert>
         </Snackbar>
-      </div>
+      </Box>
     </Box>
   );
 };
