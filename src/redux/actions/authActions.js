@@ -44,3 +44,9 @@ export const removeFromCart = (productId) => ({
 export const clearCart = () => ({
   type: "CLEAR_CART",
 });
+
+// Action to set search query
+export const setSearchQuery = (query) => ({
+  type: "SET_SEARCH_QUERY",
+  payload: query,
+});

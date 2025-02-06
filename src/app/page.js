@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -23,7 +22,7 @@ const Home = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-
+  const searchQuery = useSelector((state) => state.auth.searchQuery);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -37,6 +36,13 @@ const Home = () => {
     }
     setOpenSnackbar(true);
   };
+
+  // Filter products based on search query
+  const filteredProducts = searchQuery
+    ? products.filter((product) =>
+        product.title?.toLowerCase().includes(searchQuery?.toLowerCase())
+      )
+    : products;
 
   return (
     <Box
@@ -53,187 +59,204 @@ const Home = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: {
-              xs: "repeat(auto-fit, minmax(175px, 1fr))",
-              xxs: "repeat(auto-fit, minmax(200px, 1fr))",
-              xmd: "repeat(auto-fit, minmax(275px, 1fr))",
-              md: "repeat(auto-fit, minmax(300px, 1fr))",
+              xs:
+                filteredProducts.length === 1
+                  ? "minmax(175px, 300px)"
+                  : "repeat(auto-fit, minmax(175px, 1fr))",
+              xxs:
+                filteredProducts.length === 1
+                  ? "minmax(200px, 300px)"
+                  : "repeat(auto-fit, minmax(200px, 1fr))",
+              xmd:
+                filteredProducts.length === 1
+                  ? "minmax(275px, 300px)"
+                  : "repeat(auto-fit, minmax(275px, 1fr))",
+              md:
+                filteredProducts.length === 1
+                  ? "minmax(300px, 350px)"
+                  : "repeat(auto-fit, minmax(300px, 1fr))",
             },
+            justifyContent:
+              filteredProducts.length === 1 ? "center" : "stretch", // Center single product
           }}
         >
-          {products.map((product) => (
-            <Grid
-              item
-              key={product.id}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              <Card
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <Grid
+                item
+                key={product.id}
                 sx={{
-                  backgroundColor: "white",
-                  boxShadow: 3,
-                  borderRadius: { xs: 0, xxs: 2 },
-                  width: "100%",
-                  minWidth: {
-                    xs: 150,
-                    xxs: 200,
-                    xmd: 275,
-                    md: 300,
-                  },
+                  display: "flex",
+                  justifyContent: "left",
                 }}
               >
-                <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    width={500}
-                    height={500}
-                    style={{ objectFit: "cover", borderRadius: 8 }}
-                    priority
-                  />
-
-                  <Box sx={{ mt: 2 }}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: 500,
-                        color: "primary.main",
-                        cursor: "pointer",
-                        mb: 0.5,
-                        lineHeight: 1.3,
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        fontSize: {
-                          xs: "1.125rem",
-                          xxs: "1.25rem",
-                        },
-                      }}
-                      title={product.title}
-                      onClick={() =>
-                        router.push(`/product-details/${product.slug}`)
-                      }
-                    >
-                      {product.title}
-                    </Typography>
-
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        mb: 1,
-                        display: { xs: "none", xxs: "-webkit-box" }, // Hide on mobile, show on larger screens
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                      title={product.description}
-                    >
-                      {product.description}
-                    </Typography>
-
-                    <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-                      {Stars(parseFloat(product.averageReview))}
+                <Card
+                  sx={{
+                    backgroundColor: "white",
+                    boxShadow: 3,
+                    borderRadius: { xs: 0, xxs: 2 },
+                    width: "100%",
+                    minWidth: {
+                      xs: 150,
+                      xxs: 200,
+                      xmd: 275,
+                      md: 300,
+                    },
+                  }}
+                >
+                  <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
+                    <Image
+                      src={product.image}
+                      alt={product.title}
+                      width={500}
+                      height={500}
+                      style={{ objectFit: "cover", borderRadius: 8 }}
+                      priority
+                    />
+                    <Box sx={{ mt: 2 }}>
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: 500,
+                          color: "primary.main",
+                          cursor: "pointer",
+                          mb: 0.5,
+                          lineHeight: 1.3,
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 2,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          fontSize: {
+                            xs: "1.125rem",
+                            xxs: "1.25rem",
+                          },
+                        }}
+                        title={product.title}
+                        onClick={() =>
+                          router.push(`/product-details/${product.slug}`)
+                        }
+                      >
+                        {product.title}
+                      </Typography>
                       <Typography
                         variant="body2"
                         sx={{
-                          fontWeight: "500",
-                          ml: 1,
+                          mb: 1,
+                          display: { xs: "none", xxs: "-webkit-box" }, // Hide on mobile, show on larger screens
+                          WebkitBoxOrient: "vertical",
+                          WebkitLineClamp: 2,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={product.description}
+                      >
+                        {product.description}
+                      </Typography>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                      >
+                        {Stars(parseFloat(product.averageReview))}
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            fontWeight: "500",
+                            ml: 1,
+                            fontSize: {
+                              xs: "0.75rem",
+                              xxs: "0.875rem",
+                            },
+                          }}
+                        >
+                          {product.averageReview} / 5.0
+                        </Typography>
+                      </Box>
+                      {product.limitedDeal && (
+                        <Button
+                          variant="contained"
+                          sx={{
+                            backgroundColor: "#CC0C39",
+                            color: "white",
+                            fontWeight: "bold",
+                            textTransform: "none",
+                            mt: { xs: 0.5, xxs: 1 },
+                            mb: { xs: 1, xxs: 2 },
+                            maxWidth: "75%",
+                            fontSize: "x-small",
+                            px: 1,
+                            py: 0.5,
+                            borderRadius: "2px",
+                            letterSpacing: "0.4px",
+                            "&:hover": { backgroundColor: "#A00A2E" },
+                          }}
+                        >
+                          Limited Time Deal
+                        </Button>
+                      )}
+                      <Typography
+                        variant="h6"
+                        sx={{
+                          fontWeight: "600",
+                          color: "#113065",
+                          lineHeight: 1,
                           fontSize: {
-                            xs: "0.75rem",
-                            xxs: "0.875rem",
+                            xs: "1.125rem",
+                            xxs: "1.25rem",
                           },
                         }}
                       >
-                        {product.averageReview} / 5.0
+                        ₹{product.price}{" "}
+                        <Typography
+                          component="span"
+                          sx={{ color: "grey", fontSize: "small" }}
+                        >
+                          M.R.P: <s>₹{product.mrp}</s>
+                        </Typography>
+                        <Typography
+                          component="span"
+                          sx={{
+                            color: "green",
+                            fontWeight: "bold",
+                            fontSize: "small",
+                            ml: 0.5,
+                          }}
+                        >
+                          ({product.discount}% off)
+                        </Typography>
                       </Typography>
-                    </Box>
-
-                    {product.limitedDeal && (
                       <Button
                         variant="contained"
+                        color="primary"
+                        onClick={() => handleAddToCart(product)}
                         sx={{
-                          backgroundColor: "#CC0C39",
+                          backgroundColor: "primary.main",
                           color: "white",
-                          fontWeight: "bold",
+                          width: "100%",
+                          my: { xs: 1, xxs: 1.5 },
                           textTransform: "none",
-                          mt: { xs: 0.5, xxs: 1 },
-                          mb: { xs: 1, xxs: 2 },
-                          maxWidth: "75%",
-                          fontSize: "x-small",
-                          px: 1,
-                          py: 0.5,
-                          borderRadius: "2px",
-                          letterSpacing: "0.4px",
-                          "&:hover": { backgroundColor: "#A00A2E" },
+                          transition:
+                            "background-color 0.3s ease, color 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "secondary.main",
+                            color: "primary.main",
+                            fontWeight: "bold",
+                          },
                         }}
                       >
-                        Limited Time Deal
+                        Add to Cart
                       </Button>
-                    )}
-
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontWeight: "600",
-                        color: "#113065",
-                        lineHeight: 1,
-                        fontSize: {
-                          xs: "1.125rem",
-                          xxs: "1.25rem",
-                        },
-                      }}
-                    >
-                      ₹{product.price}{" "}
-                      <Typography
-                        component="span"
-                        sx={{ color: "grey", fontSize: "small" }}
-                      >
-                        M.R.P: <s>₹{product.mrp}</s>
-                      </Typography>
-                      <Typography
-                        component="span"
-                        sx={{
-                          color: "green",
-                          fontWeight: "bold",
-                          fontSize: "small",
-                          ml: 0.5,
-                        }}
-                      >
-                        ({product.discount}% off)
-                      </Typography>
-                    </Typography>
-
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleAddToCart(product)}
-                      sx={{
-                        backgroundColor: "primary.main",
-                        color: "white",
-                        width: "100%",
-                        my: { xs: 1, xxs: 1.5 },
-                        textTransform: "none",
-                        transition:
-                          "background-color 0.3s ease, color 0.3s ease",
-                        "&:hover": {
-                          backgroundColor: "secondary.main",
-                          color: "primary.main",
-                          fontWeight: "bold",
-                        },
-                      }}
-                    >
-                      Add to Cart
-                    </Button>
-
-                    <RazorpayButton />
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+                      <RazorpayButton />
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Typography variant="h6" sx={{ textAlign: "center", my: 4 }}>
+              No products found.
+            </Typography>
+          )}
         </Grid>
-
         <Snackbar
           open={openSnackbar}
           autoHideDuration={3000}

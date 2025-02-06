@@ -10,14 +10,17 @@ const noopStorage = {
 };
 
 // Authentication reducer
-const authReducer = (state = { isLoggedIn: false, userName: "" }, action) => {
+const authReducer = (
+  state = { isLoggedIn: false, userName: "", searchQuery: "" },
+  action
+) => {
   switch (action.type) {
     case "LOGIN":
       return { ...state, isLoggedIn: true, userName: action.payload.userName };
-
     case "LOGOUT":
       return { ...state, isLoggedIn: false, userName: "" };
-
+    case "SET_SEARCH_QUERY": // New action type for search query
+      return { ...state, searchQuery: action.payload };
     default:
       return state;
   }

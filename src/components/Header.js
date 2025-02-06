@@ -16,7 +16,6 @@ import {
   Typography,
   Menu,
   MenuItem,
-  useTheme,
 } from "@mui/material";
 import {
   Person,
@@ -25,24 +24,35 @@ import {
   ExitToApp,
   Menu as MenuIcon,
 } from "@mui/icons-material";
-import { logout } from "@/redux/actions/authActions";
+import { logout, setSearchQuery } from "@/redux/actions/authActions";
 
 export default function Header() {
-  const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { isLoggedIn, userName } = useSelector((state) => state.auth);
-
-  const [isClient, setIsClient] = useState(false); // Initialize client-side check
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
   const searchInputRef = useRef(null);
 
   useEffect(() => {
-    setIsClient(true); // Set isClient to true after component has mounted
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setDrawerOpen(false);
+        setSearchOpen(false);
+      }
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -83,72 +93,58 @@ export default function Header() {
     setSearchOpen((prev) => !prev);
   };
 
-  // Automatically focus on search input when search bar opens
-  useEffect(() => {
-    if (searchOpen && searchInputRef.current) {
-      // To Do: Not working
-      searchInputRef.current.focus();
-    }
-  }, [searchOpen]);
+  const handleSearchChange = (event) => {
+    const query = event.target.value;
+    dispatch(setSearchQuery(query)); // Dispatch search query to Redux
+  };
 
-  // Close Hamburger menu and Search bar on screen resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setDrawerOpen(false);
-        setSearchOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  if (!isClient) {
-    return null; // Prevent rendering until the client-side is ready
+  if (typeof window === "undefined") {
+    return null; // Prevent server-side rendering
   }
 
   return (
     <AppBar position="sticky" color="secondary" sx={{ boxShadow: 1 }}>
       <Toolbar sx={{ justifyContent: "space-between", alignItems: "center" }}>
         {/* Logo Section */}
-        <Box display="flex" alignItems="center" gap={2}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Link href="/" passHref>
-            <img
-              src="/thevedic.webp"
-              alt="Logo"
-              style={{ height: "40px", cursor: "pointer" }}
-            />
+            <Box
+              component="a"
+              sx={{ display: "flex", alignItems: "center", gap: 2 }}
+            >
+              <img
+                src="/thevedic.webp"
+                alt="Logo"
+                style={{ height: "40px", cursor: "pointer" }}
+              />
+              <Typography
+                variant="h6"
+                component="span"
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "1rem",
+                  color: "primary.main",
+                  lineHeight: 1.3,
+                  letterSpacing: 0.5,
+                  typography: "navFont",
+                  mt: 0.4,
+                }}
+              >
+                <span style={{ display: "block" }}>The Vedic</span>
+                <span style={{ display: "block" }}>Wellness</span>
+              </Typography>
+            </Box>
           </Link>
-          <Typography
-            variant="h6"
-            component="span"
-            sx={{
-              fontWeight: 600,
-              fontSize: "1rem",
-              color: "primary.main",
-              lineHeight: 1.3,
-              letterSpacing: 0.5,
-              typography: "navFont",
-              mt: 0.4,
-            }}
-          >
-            <span style={{ display: "block" }}>The Vedic</span>
-            <span style={{ display: "block" }}>Wellness</span>
-          </Typography>
         </Box>
 
         {/* Desktop Links */}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2, ml: "auto" }}>
           {links.map((link) => (
             <Button
-              color="primary"
-              sx={{ fontWeight: 500 }}
-              component={Link}
               key={link.href}
+              component={Link}
               href={link.href}
+              sx={{ fontWeight: 500, color: "primary.main" }}
             >
               {link.label}
             </Button>
@@ -168,6 +164,7 @@ export default function Header() {
           <IconButton
             color="primary"
             onClick={toggleSearchBar}
+            aria-label="Open search bar"
             sx={{ display: { xs: "flex", md: "none" } }}
           >
             <Search />
@@ -175,7 +172,7 @@ export default function Header() {
 
           {/* Desktop Search Bar */}
           <InputBase
-            ref={searchInputRef}
+            inputProps={{ ref: searchInputRef }}
             sx={{
               display: { xs: "none", md: "flex" },
               backgroundColor: "background.white",
@@ -189,6 +186,7 @@ export default function Header() {
             }}
             placeholder="Search"
             startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
+            onChange={handleSearchChange} // Handle search input changes
           />
 
           {isLoggedIn ? (
@@ -207,6 +205,7 @@ export default function Header() {
           <IconButton
             color="primary"
             onClick={toggleDrawer(true)}
+            aria-label="Open menu"
             sx={{ display: { xs: "block", md: "none" } }}
           >
             <MenuIcon />
@@ -214,53 +213,39 @@ export default function Header() {
         </Box>
       </Toolbar>
 
+      {/* Profile Menu */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "profile-menu",
-        }}
-        sx={{
-          mt: {
-            xs: 1.2,
-            sm: 1.6,
-          },
-        }}
+        MenuListProps={{ "aria-labelledby": "profile-menu" }}
+        sx={{ mt: { xs: 1.2, sm: 1.6 } }}
       >
         <MenuItem
           onClick={handleProfile}
           sx={{
             padding: "10px 20px",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.08)",
-            },
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.08)" },
           }}
         >
           <Person sx={{ mr: 1 }} />
           Profile
         </MenuItem>
-
         <MenuItem
           onClick={() => router.push("/cart")}
           sx={{
             padding: "10px 20px",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.08)",
-            },
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.08)" },
           }}
         >
           <ShoppingCart sx={{ mr: 1 }} />
           Cart
         </MenuItem>
-
         <MenuItem
           onClick={handleLogout}
           sx={{
             padding: "10px 20px",
-            "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.08)",
-            },
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.08)" },
           }}
         >
           <ExitToApp sx={{ mr: 1 }} />
@@ -283,7 +268,7 @@ export default function Header() {
           }}
         >
           <InputBase
-            ref={searchInputRef}
+            inputProps={{ ref: searchInputRef }}
             fullWidth
             placeholder="Search"
             sx={{
@@ -293,6 +278,7 @@ export default function Header() {
               px: 2,
               py: 1,
             }}
+            onChange={handleSearchChange} // Handle search input changes
           />
         </Box>
       )}
