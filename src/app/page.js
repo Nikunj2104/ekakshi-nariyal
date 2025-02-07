@@ -8,7 +8,7 @@ import {
   Box,
   Snackbar,
   Alert,
-  Grid,
+  Grid2 as Grid,
   Card,
   CardContent,
 } from "@mui/material";
@@ -17,6 +17,7 @@ import Stars from "@/components/Stars";
 import RazorpayButton from "@/components/RazorpayButton";
 import { products } from "@/json/products.json";
 import { addToCart } from "@/redux/actions/authActions";
+import Message from "@/components/Message";
 
 const Home = () => {
   const router = useRouter();
@@ -83,7 +84,6 @@ const Home = () => {
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <Grid
-                item
                 key={product.id}
                 sx={{
                   display: "flex",
@@ -252,9 +252,7 @@ const Home = () => {
               </Grid>
             ))
           ) : (
-            <Typography variant="h6" sx={{ textAlign: "center", my: 4 }}>
-              No products found.
-            </Typography>
+            <Message title="No products found!" />
           )}
         </Grid>
         <Snackbar

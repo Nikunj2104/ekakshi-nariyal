@@ -23,6 +23,7 @@ import {
   ShoppingCart,
   ExitToApp,
   Menu as MenuIcon,
+  Close,
 } from "@mui/icons-material";
 import { logout, setSearchQuery } from "@/redux/actions/authActions";
 
@@ -33,6 +34,7 @@ export default function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [hasValue, setHasValue] = useState(false);
   const searchInputRef = useRef(null);
 
   useEffect(() => {
@@ -41,9 +43,10 @@ export default function Header() {
         setDrawerOpen(false);
         setSearchOpen(false);
       }
+      clearSearch();
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -96,11 +99,17 @@ export default function Header() {
   const handleSearchChange = (event) => {
     const query = event.target.value;
     dispatch(setSearchQuery(query)); // Dispatch search query to Redux
+    setHasValue(!!query);
   };
 
-  if (typeof window === "undefined") {
-    return null; // Prevent server-side rendering
-  }
+  const clearSearch = () => {
+    dispatch(setSearchQuery(""));
+    if (searchInputRef.current) {
+      searchInputRef.current.value = "";
+    }
+    setHasValue(false);
+    setSearchOpen(false);
+  };
 
   return (
     <AppBar position="sticky" color="secondary" sx={{ boxShadow: 1 }}>
@@ -108,10 +117,7 @@ export default function Header() {
         {/* Logo Section */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Link href="/" passHref>
-            <Box
-              component="a"
-              sx={{ display: "flex", alignItems: "center", gap: 2 }}
-            >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <img
                 src="/thevedic.webp"
                 alt="Logo"
@@ -186,9 +192,23 @@ export default function Header() {
             }}
             placeholder="Search"
             startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
-            onChange={handleSearchChange} // Handle search input changes
+            endAdornment={
+              <IconButton
+                size="small"
+                onClick={clearSearch}
+                sx={{ visibility: hasValue ? "visible" : "hidden" }}
+                aria-label="Clear search"
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            }
+            onChange={handleSearchChange}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                clearSearch();
+              }
+            }}
           />
-
           {isLoggedIn ? (
             <IconButton color="primary" onClick={handleProfileClick}>
               <Person />
@@ -278,7 +298,25 @@ export default function Header() {
               px: 2,
               py: 1,
             }}
-            onChange={handleSearchChange} // Handle search input changes
+            startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
+            endAdornment={
+              <IconButton
+                size="small"
+                onClick={clearSearch}
+                sx={{
+                  visibility: hasValue ? "visible" : "hidden",
+                }}
+                aria-label="Clear search"
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            }
+            onChange={handleSearchChange}
+            onKeyDown={(event) => {
+              if (event.key === "Escape") {
+                clearSearch();
+              }
+            }}
           />
         </Box>
       )}

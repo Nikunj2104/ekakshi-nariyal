@@ -17,10 +17,10 @@ const Message = ({ title, message, buttonText, buttonLink }) => {
         width: "100%",
       }}
     >
-      <Typography variant="h3" color="primary" gutterBottom>
+      <Typography variant="h4" color="primary" gutterBottom>
         {title || "Coming Soon!"}
       </Typography>
-      <Typography variant="h5" color="textSecondary">
+      <Typography variant="h6" color="textSecondary">
         {message ||
           "We're working hard to bring something awesome. Stay tuned for updates."}
       </Typography>
@@ -34,7 +34,7 @@ const Message = ({ title, message, buttonText, buttonLink }) => {
             sx={{
               borderRadius: 1,
               paddingX: 4,
-              marginTop: 4,
+              marginTop: 3,
               "&:hover": {
                 backgroundColor: "secondary.main",
                 color: "primary.main",
