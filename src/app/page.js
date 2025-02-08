@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Typography,
   Button,
@@ -12,18 +13,20 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import Stars from "@/components/Stars";
+import Message from "@/components/Message";
 import RazorpayButton from "@/components/RazorpayButton";
+import Stars from "@/components/Stars";
 import { products } from "@/json/products.json";
 import { addToCart } from "@/redux/actions/authActions";
-import Message from "@/components/Message";
 
 const Home = () => {
   const router = useRouter();
+
   const dispatch = useDispatch();
+
   const cartItems = useSelector((state) => state.cart.items);
   const searchQuery = useSelector((state) => state.auth.searchQuery);
+
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
