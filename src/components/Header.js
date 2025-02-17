@@ -29,9 +29,7 @@ import { logout, setSearchQuery } from "@/redux/actions/authActions";
 
 export default function Header() {
   const router = useRouter();
-
   const dispatch = useDispatch();
-
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -40,28 +38,41 @@ export default function Header() {
   const [hasValue, setHasValue] = useState(false);
   const [truncatedQuery, setTruncatedQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [viewWithHamburger, setViewWithHamburger] = useState(
+    window.innerWidth < 900
+  );
+  const [searchQuery, setSearchQueryState] = useState("");
 
-  const searchInputRef = useRef(null);
+  // Usecase: Logo should not overlap with the search bar
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 400);
+
+  const desktopSearchInputRef = useRef(null);
+  const mobileSearchInputRef = useRef(null);
 
   useEffect(() => {
-    clearSearch();
-    handleResize();
+    const handleResize = () => {
+      const newViewWithHamburger = window.innerWidth < 900;
+      const newIsSmallScreen = window.innerWidth < 400;
+      if (newViewWithHamburger !== viewWithHamburger) {
+        clearSearch();
+        setDrawerOpen(false);
+        setSearchOpen(false);
+        setViewWithHamburger(newViewWithHamburger);
+      }
+      if (newIsSmallScreen !== isSmallScreen) {
+        setIsSmallScreen(newIsSmallScreen);
+      }
+    };
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [viewWithHamburger, isSmallScreen]);
 
   useEffect(() => {
-    if (searchOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
+    if (searchOpen && mobileSearchInputRef.current) {
+      mobileSearchInputRef.current.focus();
     }
   }, [searchOpen]);
-
-  const handleResize = () => {
-    if (window.innerWidth >= 768) {
-      setDrawerOpen(false);
-      setSearchOpen(false);
-    }
-  };
 
   const handleLogout = () => {
     dispatch(logout());
@@ -104,15 +115,20 @@ export default function Header() {
 
   const handleSearchChange = (event) => {
     const query = event.target.value;
+    setSearchQueryState(query);
     dispatch(setSearchQuery(query));
     setHasValue(!!query);
     setTruncatedQuery(query.slice(0, 5));
   };
 
   const clearSearch = () => {
+    setSearchQueryState("");
     dispatch(setSearchQuery(""));
-    if (searchInputRef.current) {
-      searchInputRef.current.value = "";
+    if (desktopSearchInputRef.current?.value) {
+      desktopSearchInputRef.current.value = "";
+    }
+    if (mobileSearchInputRef.current?.value) {
+      mobileSearchInputRef.current.value = "";
     }
     setHasValue(false);
     setSearchOpen(false);
@@ -125,8 +141,11 @@ export default function Header() {
       clearSearch();
     } else if (event.key === "Enter") {
       setSearchOpen(false); // Close search bar on mobile
-      if (searchInputRef.current) {
-        searchInputRef.current.blur(); // Remove focus on desktop
+      if (desktopSearchInputRef.current) {
+        desktopSearchInputRef.current.blur(); // Remove focus on desktop
+      }
+      if (mobileSearchInputRef.current) {
+        mobileSearchInputRef.current.blur(); // Remove focus on mobile
       }
     }
   };
@@ -153,7 +172,11 @@ export default function Header() {
             backgroundColor: "rgba(0, 0, 0, 0.5)",
             zIndex: 1,
           }}
-          onClick={clearSearch} // Close search bar when clicking outside
+          onClick={() => {
+            if (!isSearchFocused) {
+              setSearchOpen(false);
+            }
+          }} // Close search bar when clicking outside if not focused
         />
       )}
 
@@ -213,7 +236,7 @@ export default function Header() {
             }}
           >
             {/* Search Icon (Mobile) */}
-            {!searchOpen && truncatedQuery && (
+            {!searchOpen && truncatedQuery && !isSmallScreen && (
               <Box
                 sx={{
                   display: { xs: "flex", md: "none" },
@@ -253,7 +276,7 @@ export default function Header() {
 
             {/* Desktop Search Bar */}
             <InputBase
-              inputProps={{ ref: searchInputRef }}
+              inputProps={{ ref: desktopSearchInputRef }}
               sx={{
                 display: { xs: "none", md: "flex" },
                 backgroundColor: "background.white",
@@ -274,12 +297,14 @@ export default function Header() {
                   onClick={clearSearch}
                   sx={{
                     visibility: hasValue ? "visible" : "hidden",
+                    color: "primary.main",
                   }}
                   aria-label="Clear search"
                 >
                   <Close fontSize="small" />
                 </IconButton>
               }
+              value={searchQuery}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
               onFocus={handleSearchFocus}
@@ -287,12 +312,15 @@ export default function Header() {
             />
 
             {isLoggedIn ? (
-              <IconButton color="primary" onClick={handleProfileClick}>
+              <IconButton
+                sx={{ color: "primary.main" }}
+                onClick={handleProfileClick}
+              >
                 <Person />
               </IconButton>
             ) : (
               <Link href="/sign-in" passHref>
-                <IconButton color="primary">
+                <IconButton sx={{ color: "primary.main" }}>
                   <Person />
                 </IconButton>
               </Link>
@@ -365,7 +393,7 @@ export default function Header() {
             }}
           >
             <InputBase
-              inputProps={{ ref: searchInputRef }}
+              inputProps={{ ref: mobileSearchInputRef }}
               fullWidth
               placeholder="Search"
               sx={{
@@ -382,12 +410,14 @@ export default function Header() {
                   onClick={clearSearch}
                   sx={{
                     visibility: hasValue ? "visible" : "hidden",
+                    color: "primary.main",
                   }}
                   aria-label="Clear search"
                 >
                   <Close fontSize="small" />
                 </IconButton>
               }
+              value={searchQuery}
               onChange={handleSearchChange}
               onKeyDown={handleKeyDown}
               onFocus={handleSearchFocus}
@@ -429,6 +459,50 @@ export default function Header() {
           </Box>
         </Drawer>
       </AppBar>
+
+      {/* Search Bar when width is less than 400 */}
+      {!searchOpen && truncatedQuery && isSmallScreen && (
+        <Box
+          sx={{
+            position: "sticky",
+            top: 56,
+            zIndex: 1000,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "background.white",
+            px: 2,
+            py: 0.7,
+            width: "100%",
+            borderBottom: "1px solid grey",
+          }}
+        >
+          <InputBase
+            inputProps={{ ref: desktopSearchInputRef }}
+            fullWidth
+            placeholder="Search"
+            startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
+            endAdornment={
+              <IconButton
+                size="small"
+                onClick={clearSearch}
+                sx={{
+                  visibility: hasValue ? "visible" : "hidden",
+                  color: "primary.main",
+                }}
+                aria-label="Clear search"
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            }
+            value={searchQuery}
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
+            onFocus={handleSearchFocus}
+            onBlur={handleSearchBlur}
+          />
+        </Box>
+      )}
     </>
   );
 }

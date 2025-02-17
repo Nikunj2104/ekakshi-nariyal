@@ -52,7 +52,7 @@ const Home = () => {
     <Box
       sx={{
         minHeight: "100vh",
-        py: { xs: 0, xxs: 1.5, sm: 2, md: 4 },
+        py: { xs: 1.5, xxs: 1.5, sm: 2, md: 4 },
         backgroundColor: "background.secondary",
       }}
     >
