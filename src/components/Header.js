@@ -39,12 +39,14 @@ export default function Header() {
   const [truncatedQuery, setTruncatedQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [viewWithHamburger, setViewWithHamburger] = useState(
-    window.innerWidth < 900
+    typeof window !== "undefined" ? window.innerWidth < 900 : false
   );
   const [searchQuery, setSearchQueryState] = useState("");
 
   // Usecase: Logo should not overlap with the search bar
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 400);
+  const [isSmallScreen, setIsSmallScreen] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 600 : false
+  );
 
   const desktopSearchInputRef = useRef(null);
   const mobileSearchInputRef = useRef(null);
@@ -52,7 +54,7 @@ export default function Header() {
   useEffect(() => {
     const handleResize = () => {
       const newViewWithHamburger = window.innerWidth < 900;
-      const newIsSmallScreen = window.innerWidth < 400;
+      const newIsSmallScreen = window.innerWidth < 600;
       if (newViewWithHamburger !== viewWithHamburger) {
         clearSearch();
         setDrawerOpen(false);
@@ -118,7 +120,7 @@ export default function Header() {
     setSearchQueryState(query);
     dispatch(setSearchQuery(query));
     setHasValue(!!query);
-    setTruncatedQuery(query.slice(0, 5));
+    setTruncatedQuery(query);
   };
 
   const clearSearch = () => {
@@ -247,18 +249,55 @@ export default function Header() {
                   borderRadius: 1,
                   px: 1,
                   py: 0.7,
-                  width: "120px",
+                  maxWidth: "270px",
+                  minWidth: "170px",
+                  justifyContent: "space-between",
                   "&:hover": {
                     cursor: "pointer",
                     boxShadow: 2,
                   },
                 }}
-                onClick={toggleSearchBar}
+                onClick={(e) => {
+                  if (e.target.tagName !== "BUTTON") {
+                    toggleSearchBar();
+                  }
+                }}
               >
-                <Search sx={{ color: "primary.main" }} />
-                <Typography variant="body1" sx={{ color: "primary.main" }}>
-                  {truncatedQuery}
-                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Search sx={{ color: "primary.main" }} />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      color: "primary.main",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {truncatedQuery}
+                  </Typography>
+                </Box>
+                <IconButton
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clearSearch();
+                  }}
+                  sx={{
+                    visibility: hasValue ? "visible" : "hidden",
+                    color: "primary.main",
+                  }}
+                  aria-label="Clear Search"
+                >
+                  <Close fontSize="small" />
+                </IconButton>
               </Box>
             )}
 
@@ -460,7 +499,7 @@ export default function Header() {
         </Drawer>
       </AppBar>
 
-      {/* Search Bar when width is less than 400 */}
+      {/* Search Bar when width is less than 600 */}
       {!searchOpen && truncatedQuery && isSmallScreen && (
         <Box
           sx={{
