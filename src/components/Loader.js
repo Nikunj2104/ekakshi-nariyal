@@ -73,7 +73,7 @@ const Loader = () => {
           fontSize: "0.8rem",
         }}
       >
-        Take off your Eyes, it's a Loader
+        Give your eyes a break, it's just a Loader
       </Typography>
     </Box>
   );

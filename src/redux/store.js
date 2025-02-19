@@ -19,7 +19,7 @@ const authReducer = (
       return { ...state, isLoggedIn: true, userName: action.payload.userName };
     case "LOGOUT":
       return { ...state, isLoggedIn: false, userName: "" };
-    case "SET_SEARCH_QUERY": // New action type for search query
+    case "SET_SEARCH_QUERY":
       return { ...state, searchQuery: action.payload };
     default:
       return state;
@@ -62,17 +62,44 @@ const cartReducer = (state = { items: [] }, action) => {
   }
 };
 
+// Wishlist reducer
+const wishlistReducer = (state = { items: [] }, action) => {
+  switch (action.type) {
+    case "ADD_TO_WISHLIST":
+      return {
+        ...state,
+        items: [...state.items, action.payload],
+      };
+
+    case "REMOVE_FROM_WISHLIST":
+      return {
+        ...state,
+        items: state.items.filter((item) => item.id !== action.payload.id),
+      };
+
+    case "CLEAR_WISHLIST":
+      return {
+        ...state,
+        items: [],
+      };
+
+    default:
+      return state;
+  }
+};
+
 // Combine reducers
 const rootReducer = combineReducers({
   auth: authReducer,
   cart: cartReducer,
+  wishlist: wishlistReducer,
 });
 
 // Redux Persist configuration
 const persistConfig = {
   key: "root",
   storage: typeof window !== "undefined" ? storage : noopStorage, // Use noopStorage on the server side
-  whitelist: ["auth", "cart"], // Persist auth and cart states
+  whitelist: ["auth", "cart", "wishlist"], // Persist auth, cart, and wishlist states
 };
 
 // Create persisted reducer

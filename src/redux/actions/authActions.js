@@ -50,3 +50,33 @@ export const setSearchQuery = (query) => ({
   type: "SET_SEARCH_QUERY",
   payload: query,
 });
+
+// Action to add product to wishlist
+export const addToWishlist = (product) => (dispatch, getState) => {
+  const state = getState();
+
+  // Check if the product already exists in the wishlist
+  const existingProduct = state.wishlist.items.find(
+    (item) => item.id === product.id
+  );
+
+  if (!existingProduct) {
+    // If it's a new product, add it to the wishlist
+    dispatch({
+      type: "ADD_TO_WISHLIST",
+      payload: product,
+    });
+  }
+  // If the product already exists, no action is taken (it is skipped)
+};
+
+// Action to remove product from wishlist
+export const removeFromWishlist = (productId) => ({
+  type: "REMOVE_FROM_WISHLIST",
+  payload: { id: productId },
+});
+
+// Action to clear the wishlist
+export const clearWishlist = () => ({
+  type: "CLEAR_WISHLIST",
+});

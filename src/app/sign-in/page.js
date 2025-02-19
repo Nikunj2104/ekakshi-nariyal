@@ -4,12 +4,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TextField, Button, Container, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import { login } from "@/redux/actions/authActions";
 import API from "../../../utils/axios";
 
 const Signin = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -20,16 +29,21 @@ const Signin = () => {
     if (isLoggedIn) {
       router.push("/");
     }
-  }, [router]);
+  }, [router, isLoggedIn]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
     try {
       const { data } = await API.post("/auth/sign-in", form);
       dispatch(login(data.user.name)); // Dispatch the login action with the user's name
       router.push("/");
     } catch (error) {
+      setError("Invalid email or password. Please try again.");
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,12 +63,18 @@ const Signin = () => {
           margin="normal"
           onChange={(e) => setForm({ ...form, password: e.target.value })}
         />
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            {error}
+          </Alert>
+        )}
         <Button
           variant="contained"
           type="submit"
           sx={{ textTransform: "none", mt: 2 }}
+          disabled={loading}
         >
-          Sign In
+          {loading ? <CircularProgress size={24} /> : "Sign In"}
         </Button>
       </form>
 

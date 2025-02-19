@@ -17,7 +17,7 @@ import Message from "@/components/Message";
 import RazorpayButton from "@/components/RazorpayButton";
 import Stars from "@/components/Stars";
 import { products } from "@/json/products.json";
-import { addToCart } from "@/redux/actions/authActions";
+import { addToWishlist } from "@/redux/actions/authActions";
 
 const Home = () => {
   const router = useRouter();
@@ -47,6 +47,13 @@ const Home = () => {
         product.title?.toLowerCase().includes(searchQuery?.toLowerCase())
       )
     : products;
+
+  const handleAddToWishlist = (product) => {
+    dispatch(addToWishlist(product));
+    // TODO: if already addedded to wishlist
+    setSnackbarMessage("Product added to wishlist!");
+    setOpenSnackbar(true);
+  };
 
   return (
     <Box
@@ -249,6 +256,27 @@ const Home = () => {
                         Add to Cart
                       </Button>
                       <RazorpayButton />
+
+                      {/* TODO: positioning and looks */}
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => handleAddToWishlist(product)}
+                        sx={{
+                          width: "100%",
+                          my: 1,
+                          textTransform: "none",
+                          transition:
+                            "background-color 0.3s ease, color 0.3s ease",
+                          "&:hover": {
+                            backgroundColor: "secondary.main",
+                            color: "white",
+                            fontWeight: "bold",
+                          },
+                        }}
+                      >
+                        Add to Wishlist
+                      </Button>
                     </Box>
                   </CardContent>
                 </Card>
