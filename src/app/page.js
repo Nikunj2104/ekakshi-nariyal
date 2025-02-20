@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Typography,
@@ -12,33 +12,72 @@ import {
   Grid2 as Grid,
   Card,
   CardContent,
+  IconButton,
 } from "@mui/material";
+import { Star, StarBorder } from "@mui/icons-material";
 import Message from "@/components/Message";
 import RazorpayButton from "@/components/RazorpayButton";
 import Stars from "@/components/Stars";
 import { products } from "@/json/products.json";
-import { addToWishlist } from "@/redux/actions/authActions";
+import {
+  addToWishlist,
+  removeFromWishlist,
+  clearSearchQuery,
+  addToCart,
+} from "@/redux/actions/authActions";
 
 const Home = () => {
   const router = useRouter();
-
   const dispatch = useDispatch();
 
   const cartItems = useSelector((state) => state.cart.items);
   const searchQuery = useSelector((state) => state.auth.searchQuery);
+  const wishlistItems = useSelector((state) => state.wishlist.items);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  useEffect(() => {
+    dispatch(clearSearchQuery());
+  }, [dispatch]);
+
   const handleAddToCart = (product) => {
     const isProductInCart = cartItems?.some((item) => item.id === product.id);
-    if (isProductInCart) {
-      setSnackbarMessage("Product is already added to cart!");
-    } else {
-      dispatch(addToCart(product));
-      setSnackbarMessage("Product added to cart!");
-    }
-    setOpenSnackbar(true);
+
+    // Close the Snackbar before opening it again
+    setOpenSnackbar(false);
+
+    // Use a timeout to ensure the Snackbar closes before reopening
+    setTimeout(() => {
+      if (isProductInCart) {
+        setSnackbarMessage("Product is already added to cart!");
+      } else {
+        dispatch(addToCart(product));
+        setSnackbarMessage("Product added to cart!");
+      }
+      setOpenSnackbar(true);
+    }, 100); // 100 ms delay to ensure the Snackbar closes properly
+  };
+
+  const handleToggleWishlist = (product) => {
+    const isProductInWishlist = wishlistItems?.some(
+      (item) => item.id === product.id
+    );
+
+    // Close the Snackbar before opening it again
+    setOpenSnackbar(false);
+
+    // Use a timeout to ensure the Snackbar closes before reopening
+    setTimeout(() => {
+      if (isProductInWishlist) {
+        dispatch(removeFromWishlist(product.id));
+        setSnackbarMessage("Product removed from wishlist!");
+      } else {
+        dispatch(addToWishlist(product));
+        setSnackbarMessage("Product added to wishlist!");
+      }
+      setOpenSnackbar(true); // Open the Snackbar with the new message
+    }, 100); // 100 ms delay to ensure the Snackbar closes properly
   };
 
   // Filter products based on search query
@@ -47,13 +86,6 @@ const Home = () => {
         product.title?.toLowerCase().includes(searchQuery?.toLowerCase())
       )
     : products;
-
-  const handleAddToWishlist = (product) => {
-    dispatch(addToWishlist(product));
-    // TODO: if already addedded to wishlist
-    setSnackbarMessage("Product added to wishlist!");
-    setOpenSnackbar(true);
-  };
 
   return (
     <Box
@@ -88,7 +120,7 @@ const Home = () => {
                   : "repeat(auto-fit, minmax(300px, 1fr))",
             },
             justifyContent:
-              filteredProducts.length === 1 ? "center" : "stretch", // Center single product
+              filteredProducts.length === 1 ? "center" : "stretch",
           }}
         >
           {filteredProducts.length > 0 ? (
@@ -112,9 +144,36 @@ const Home = () => {
                       xmd: 275,
                       md: 300,
                     },
+                    position: "relative",
                   }}
                 >
                   <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
+                    <IconButton
+                      onClick={() => handleToggleWishlist(product)}
+                      sx={{
+                        color: wishlistItems?.some(
+                          (item) => item.id === product.id
+                        )
+                          ? "gold"
+                          : "grey",
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                          color: "gold",
+                          "& .MuiTouchRipple-root": {
+                            display: "none",
+                          },
+                        },
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                      }}
+                    >
+                      {wishlistItems?.some((item) => item.id === product.id) ? (
+                        <Star />
+                      ) : (
+                        <StarBorder />
+                      )}
+                    </IconButton>
                     <Image
                       src={product.image}
                       alt={product.title}
@@ -153,7 +212,7 @@ const Home = () => {
                         variant="body2"
                         sx={{
                           mb: 1,
-                          display: { xs: "none", xxs: "-webkit-box" }, // Hide on mobile, show on larger screens
+                          display: { xs: "none", xxs: "-webkit-box" },
                           WebkitBoxOrient: "vertical",
                           WebkitLineClamp: 2,
                           overflow: "hidden",
@@ -256,27 +315,6 @@ const Home = () => {
                         Add to Cart
                       </Button>
                       <RazorpayButton />
-
-                      {/* TODO: positioning and looks */}
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={() => handleAddToWishlist(product)}
-                        sx={{
-                          width: "100%",
-                          my: 1,
-                          textTransform: "none",
-                          transition:
-                            "background-color 0.3s ease, color 0.3s ease",
-                          "&:hover": {
-                            backgroundColor: "secondary.main",
-                            color: "white",
-                            fontWeight: "bold",
-                          },
-                        }}
-                      >
-                        Add to Wishlist
-                      </Button>
                     </Box>
                   </CardContent>
                 </Card>
@@ -288,7 +326,7 @@ const Home = () => {
         </Grid>
         <Snackbar
           open={openSnackbar}
-          autoHideDuration={3000}
+          autoHideDuration={3000} // Snackbar stays visible for 3 seconds
           onClose={() => setOpenSnackbar(false)}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >

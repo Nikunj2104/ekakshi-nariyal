@@ -51,6 +51,12 @@ export const setSearchQuery = (query) => ({
   payload: query,
 });
 
+export const clearSearchQuery = () => (dispatch) => {
+  dispatch({
+    type: "CLEAR_SEARCH_QUERY",
+  });
+};
+
 // Action to add product to wishlist
 export const addToWishlist = (product) => (dispatch, getState) => {
   const state = getState();
