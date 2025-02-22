@@ -129,22 +129,26 @@ const ProductDetails = ({
             </Typography>
 
             {/* Quantity Control */}
-            <Box sx={{ display: "flex", alignItems: "center", mt: 1, ml: -1 }}>
-              <IconButton
-                onClick={() =>
-                  handleDecreaseQuantity(product.id, product.quantity)
-                }
-                disabled={product.quantity === 1}
+            {handleDecreaseQuantity && handleIncreaseQuantity && (
+              <Box
+                sx={{ display: "flex", alignItems: "center", mt: 1, ml: -1 }}
               >
-                <Remove />
-              </IconButton>
-              <Typography variant="body1" sx={{ mx: 1 }}>
-                {product.quantity}
-              </Typography>
-              <IconButton onClick={() => handleIncreaseQuantity(product.id)}>
-                <Add />
-              </IconButton>
-            </Box>
+                <IconButton
+                  onClick={() =>
+                    handleDecreaseQuantity(product.id, product.quantity)
+                  }
+                  disabled={product.quantity === 1}
+                >
+                  <Remove />
+                </IconButton>
+                <Typography variant="body1" sx={{ mx: 1 }}>
+                  {product.quantity}
+                </Typography>
+                <IconButton onClick={() => handleIncreaseQuantity(product.id)}>
+                  <Add />
+                </IconButton>
+              </Box>
+            )}
           </Box>
         </Grid>
       </Grid>

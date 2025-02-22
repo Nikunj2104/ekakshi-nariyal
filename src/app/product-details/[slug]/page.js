@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
 import {
   Box,
@@ -17,14 +17,13 @@ import RazorpayButton from "@/components/RazorpayButton";
 import Stars from "@/components/Stars";
 import { addToCart } from "@/redux/actions/authActions";
 import Message from "@/components/Message";
-import Loader from "@/components/Loader";
+import { products } from "@/json/products.json";
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const dispatch = useDispatch();
 
   const [isClient, setIsClient] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -32,17 +31,9 @@ const ProductDetail = () => {
     setIsClient(true);
   }, []);
 
-  const products = useSelector((state) => state.cart.items);
-
-  useEffect(() => {
-    if (products) {
-      setLoading(false);
-    }
-  }, [products]);
-
   const product = products?.find((p) => p.slug === slug);
 
-  const [reviews, setReviews] = useState(product.reviews || []);
+  const [reviews, setReviews] = useState(product?.reviews || []);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [newReview, setNewReview] = useState({
     reviewer: "",
@@ -86,10 +77,6 @@ const ProductDetail = () => {
 
   if (!isClient) {
     return null; // Prevent rendering until the client-side is ready
-  }
-
-  if (loading) {
-    return <Loader />;
   }
 
   if (!product) {

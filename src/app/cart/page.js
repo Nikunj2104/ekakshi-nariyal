@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,7 +9,7 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-import ProductDetails from "@/components/ProductDetailsBox";
+import ProductDetailsBox from "@/components/ProductDetailsBox";
 import { clearCart, updateCartItemQuantity } from "@/redux/actions/authActions";
 
 const Cart = () => {
@@ -71,7 +70,7 @@ const Cart = () => {
                   <>
                     {cartItems.map((product) => (
                       <Box key={product.id}>
-                        <ProductDetails
+                        <ProductDetailsBox
                           product={product}
                           handleIncreaseQuantity={handleIncreaseQuantity}
                           handleDecreaseQuantity={handleDecreaseQuantity}

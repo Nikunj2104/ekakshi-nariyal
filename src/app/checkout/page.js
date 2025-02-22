@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Box, Card, CardContent, TextField, Typography } from "@mui/material";
 import RazorpayButton from "@/components/RazorpayButton";
-import ProductDetails from "@/components/ProductDetailsBox";
+import ProductDetailsBox from "@/components/ProductDetailsBox";
 
 const Checkout = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -33,7 +33,7 @@ const Checkout = () => {
             {cartItems.length > 0 ? (
               <>
                 {cartItems.map((product) => (
-                  <ProductDetails key={product.id} product={product} />
+                  <ProductDetailsBox key={product.id} product={product} />
                 ))}
               </>
             ) : (

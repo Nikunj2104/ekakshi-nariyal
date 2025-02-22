@@ -188,7 +188,10 @@ export default function Header() {
           {/* Logo Section */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Link href="/" passHref>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                onClick={clearSearch}
+              >
                 <img
                   src="/thevedic.webp"
                   alt="Logo"
@@ -222,6 +225,7 @@ export default function Header() {
                 component={Link}
                 href={link.href}
                 sx={{ fontWeight: 500, color: "primary.main" }}
+                onClick={clearSearch}
               >
                 {link.label}
               </Button>
@@ -479,6 +483,7 @@ export default function Header() {
                   src="/thevedic.webp"
                   alt="Logo"
                   style={{ height: "40px", cursor: "pointer" }}
+                  onClick={clearSearch}
                 />
               </Link>
             </Box>
@@ -488,6 +493,7 @@ export default function Header() {
                   key={link.href}
                   disablePadding
                   sx={{ paddingLeft: 2 }}
+                  onClick={clearSearch}
                 >
                   <Link href={link.href} passHref>
                     <ListItemText primary={link.label} />
