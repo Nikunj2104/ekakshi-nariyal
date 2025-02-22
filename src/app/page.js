@@ -164,8 +164,8 @@ const Home = () => {
                           },
                         },
                         position: "absolute",
-                        top: 8,
-                        right: 8,
+                        top: 20,
+                        right: 20,
                       }}
                     >
                       {wishlistItems?.some((item) => item.id === product.id) ? (
@@ -324,6 +324,7 @@ const Home = () => {
             <Message title="No products found!" />
           )}
         </Grid>
+       
         <Snackbar
           open={openSnackbar}
           autoHideDuration={3000} // Snackbar stays visible for 3 seconds

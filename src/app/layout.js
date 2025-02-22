@@ -1,5 +1,4 @@
 "use client";
-
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "@/components/Header";
@@ -8,6 +7,10 @@ import "./globals.css"; // Tailwind or global styles
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
+
+// To solve this usecase: On refresh data between header and footer is not visible for half a second.
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 export default function RootLayout({ children }) {
   useEffect(() => {
@@ -15,6 +18,10 @@ export default function RootLayout({ children }) {
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.async = true;
     document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
   }, []);
 
   return (
@@ -49,7 +56,10 @@ export default function RootLayout({ children }) {
             <CssBaseline />
 
             <Header />
+
             <main>{children}</main>
+
+            <Footer />
           </ThemeProvider>
         </Provider>
       </body>
