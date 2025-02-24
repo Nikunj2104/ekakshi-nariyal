@@ -150,6 +150,7 @@ const Home = () => {
                   <CardContent sx={{ p: { xs: 1, sm: 2 } }}>
                     <IconButton
                       onClick={() => handleToggleWishlist(product)}
+                      aria-label="Add or Remove product from Wishlist icon"
                       sx={{
                         color: wishlistItems?.some(
                           (item) => item.id === product.id
@@ -180,7 +181,7 @@ const Home = () => {
                       width={500}
                       height={500}
                       style={{ objectFit: "cover", borderRadius: 8 }}
-                      priority
+                      loading="lazy"
                     />
                     <Box sx={{ mt: 2 }}>
                       <Typography
@@ -324,7 +325,7 @@ const Home = () => {
             <Message title="No products found!" />
           )}
         </Grid>
-       
+
         <Snackbar
           open={openSnackbar}
           autoHideDuration={3000} // Snackbar stays visible for 3 seconds

@@ -26,6 +26,7 @@ import {
   Close,
 } from "@mui/icons-material";
 import { logout, setSearchQuery } from "@/redux/actions/authActions";
+import Image from "next/image";
 
 export default function Header() {
   const router = useRouter();
@@ -192,10 +193,13 @@ export default function Header() {
                 sx={{ display: "flex", alignItems: "center", gap: 2 }}
                 onClick={clearSearch}
               >
-                <img
+                <Image
                   src="/thevedic.webp"
                   alt="Logo"
-                  style={{ height: "40px", cursor: "pointer" }}
+                  width="40"
+                  height="40"
+                  style={{ cursor: "pointer" }}
+                  loading="lazy"
                 />
                 <Typography
                   variant="h6"
@@ -356,6 +360,7 @@ export default function Header() {
 
             {isLoggedIn ? (
               <IconButton
+                aria-label="Sign in menu icon"
                 sx={{ color: "primary.main" }}
                 onClick={handleProfileClick}
               >
@@ -363,7 +368,10 @@ export default function Header() {
               </IconButton>
             ) : (
               <Link href="/sign-in" passHref>
-                <IconButton sx={{ color: "primary.main" }}>
+                <IconButton
+                  aria-label="Sign in menu icon"
+                  sx={{ color: "primary.main" }}
+                >
                   <Person />
                 </IconButton>
               </Link>
@@ -479,12 +487,12 @@ export default function Header() {
           >
             <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
               <Link href="/" passHref>
-                <img
+                <Image
                   src="/thevedic.webp"
                   alt="Logo"
                   style={{ height: "40px", cursor: "pointer" }}
                   onClick={clearSearch}
-                />
+                  loading="lazy"  />
               </Link>
             </Box>
             <List>

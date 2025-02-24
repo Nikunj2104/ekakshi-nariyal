@@ -242,7 +242,7 @@ export default function AboutUs() {
                   alt="Rudraksha Ratna Team"
                   width={500}
                   height={400}
-                />
+                  loading="lazy" />
               </Box>
             </Grid>
 

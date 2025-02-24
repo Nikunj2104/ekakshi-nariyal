@@ -44,6 +44,7 @@ const Footer = () => {
                 color="inherit"
                 underline="hover"
                 display="block"
+                aria-label={link.label}
               >
                 {link.label}
               </Link>
@@ -74,13 +75,13 @@ const Footer = () => {
               Follow Us
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
-              <Link href="#" color="inherit">
+              <Link href="#" color="inherit" aria-label="Facebook icon">
                 <Facebook />
               </Link>
-              <Link href="#" color="inherit">
+              <Link href="#" color="inherit" aria-label="Instagram icon">
                 <Instagram />
               </Link>
-              <Link href="#" color="inherit">
+              <Link href="#" color="inherit" aria-label="LinkedIn icon">
                 <LinkedIn />
               </Link>
             </Box>

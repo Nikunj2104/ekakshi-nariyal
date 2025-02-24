@@ -95,9 +95,9 @@ const ProductDetail = () => {
     >
       <div className="max-w-7xl mx-auto">
         {/* Product Details Section */}
-          <div>
-            <div className="flex flex-col md:flex-row gap-4 items-center md:items-start bg-white shadow-lg rounded-lg p-4 m-0 sm:my-2">
-              {/* Image Section */}
+        <div>
+          <div className="flex flex-col md:flex-row gap-4 items-center md:items-start bg-white shadow-lg rounded-lg p-4 m-0 sm:my-2">
+            {/* Image Section */}
             <div className="flex-1 md:w-1/2 rounded-lg overflow-hidden flex justify-center">
               {product.image && (
                 <Image
@@ -106,7 +106,7 @@ const ProductDetail = () => {
                   width={500}
                   height={500}
                   className="object-cover"
-                  priority
+                  loading="lazy"
                 />
               )}
             </div>
