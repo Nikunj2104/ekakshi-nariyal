@@ -1,28 +1,49 @@
 "use client";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "@/components/Header";
 import theme from "@/components/Theme";
-import "./globals.css"; // Tailwind or global styles
-import { Provider } from "react-redux";
 import { store } from "@/redux/store";
-import { useEffect } from "react";
-import dynamic from "next/dynamic";
+import "./globals.css"; // Tailwind or global styles
 
 // To solve this usecase: On refresh data between header and footer is not visible for half a second.
 const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 export default function RootLayout({ children }) {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    document.body.appendChild(script);
+  const router = useRouter();
 
-    return () => {
-      document.body.removeChild(script);
+  useEffect(() => {
+    // Load Razorpay script
+    const razorpayScript = document.createElement("script");
+    razorpayScript.src = "https://checkout.razorpay.com/v1/checkout.js";
+    razorpayScript.async = true;
+    document.body.appendChild(razorpayScript);
+
+    // Load Google Analytics script
+    const gtagScript = document.createElement("script");
+    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-33BT42L6RN";
+    gtagScript.async = true;
+    document.head.appendChild(gtagScript);
+
+    // Initialize Google Analytics
+    window.dataLayer = window.dataLayer || [];
+    const gtag = () => {
+      dataLayer.push(arguments);
     };
-  }, []);
+    window.gtag = gtag;
+    window.gtag("js", new Date());
+    window.gtag("config", "G-33BT42L6RN");
+
+    // Cleanup
+    return () => {
+      document.body.removeChild(razorpayScript);
+      document.head.removeChild(gtagScript);
+    };
+  }, [router.events]);
 
   return (
     <html lang="en">
