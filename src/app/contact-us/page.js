@@ -1,7 +1,5 @@
 "use client";
 
-// components/ContactForm.js
-
 import { useState } from "react";
 import {
   TextField,
@@ -20,10 +18,13 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,10 +34,39 @@ export default function ContactForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setOpenSnackbar(true);
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit the form");
+      }
+
+      const data = await response.json();
+
+      // Reset form and show success message
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      setSubmitted(true);
+      setOpenSnackbar(true);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setError("Failed to submit the form. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -141,7 +171,7 @@ export default function ContactForm() {
                     label="Phone Number"
                     name="phone"
                     variant="outlined"
-                    value={formData.phone || ""}
+                    value={formData.phone}
                     onChange={handleInputChange}
                     type="tel"
                     InputProps={{
@@ -177,14 +207,23 @@ export default function ContactForm() {
                     variant="contained"
                     color="primary"
                     fullWidth
-                    disabled={submitted}
+                    disabled={submitted || loading}
                     sx={{ py: 1.5, fontWeight: "bold" }}
                   >
-                    {submitted ? "Message Sent" : "Send Message"}
+                    {loading
+                      ? "Sending..."
+                      : submitted
+                      ? "Message Sent"
+                      : "Send Message"}
                   </Button>
                 </Grid>
               </Grid>
             </form>
+            {error && (
+              <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
+                {error}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </Box>
