@@ -1,3 +1,5 @@
+import TerserPlugin from "terser-webpack-plugin";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
@@ -12,15 +14,37 @@ const nextConfig = {
     ];
   },
   productionBrowserSourceMaps: false, // Disable source maps in production
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Obfuscate and optimize client-side code
-      config.optimization.minimizer[0].options.terserOptions = {
-        compress: {
-          drop_console: true, // Remove console logs in production
-        },
-        mangle: true, // Obfuscate variable and function names
-      };
+  webpack: (config, { isServer, dev }) => {
+    if (!isServer && !dev) {
+      // Ensure the minimizer array exists
+      config.optimization.minimizer = config.optimization.minimizer || [];
+
+      // Find the Terser plugin (if it exists)
+      const terserPlugin = config.optimization.minimizer.find(
+        (plugin) => plugin.constructor.name === "TerserPlugin"
+      );
+
+      if (terserPlugin) {
+        // Modify the Terser plugin options
+        terserPlugin.options.terserOptions = {
+          compress: {
+            drop_console: true, // Remove console logs in production
+          },
+          mangle: true, // Obfuscate variable and function names
+        };
+      } else {
+        // If Terser plugin doesn't exist, add it manually
+        config.optimization.minimizer.push(
+          new TerserPlugin({
+            terserOptions: {
+              compress: {
+                drop_console: true,
+              },
+              mangle: true,
+            },
+          })
+        );
+      }
     }
     return config;
   },
