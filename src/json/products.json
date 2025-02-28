@@ -47,58 +47,6 @@
       ]
     },
     {
-      "id": "80",
-      "title": "Hathajodi",
-      "slug": "hathajodi",
-      "description": "Your product's full description",
-      "price": "8,000",
-      "mrp": "50,000",
-      "weight": "450 gm",
-      "code": "PTC080",
-      "image": "/hathajodi.webp",
-      "limitedDeal": "Limited Time Deal",
-      "averageReview": "4",
-      "discount": "50",
-      "reviews": [
-        {
-          "id": 1,
-          "reviewer": "John R Doe",
-          "rating": 5,
-          "comment": "Great product!"
-        },
-        {
-          "id": 2,
-          "reviewer": "Jane K Smith",
-          "rating": 4,
-          "comment": "Very useful!"
-        },
-        {
-          "id": 3,
-          "reviewer": "Alice Dave",
-          "rating": 5,
-          "comment": "Exceeded expectations!"
-        },
-        {
-          "id": 4,
-          "reviewer": "Sam Wilson",
-          "rating": 3,
-          "comment": "It works well."
-        },
-        {
-          "id": 5,
-          "reviewer": "Bob Johnson",
-          "rating": 2,
-          "comment": "Not what I expected."
-        },
-        {
-          "id": 6,
-          "reviewer": "Chris Lee",
-          "rating": 4,
-          "comment": "Good value for money."
-        }
-      ]
-    },
-    {
       "id": "81",
       "title": "Indrajal",
       "slug": "indrajal",

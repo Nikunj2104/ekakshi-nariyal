@@ -11,6 +11,19 @@ const nextConfig = {
       },
     ];
   },
+  productionBrowserSourceMaps: false, // Disable source maps in production
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Obfuscate and optimize client-side code
+      config.optimization.minimizer[0].options.terserOptions = {
+        compress: {
+          drop_console: true, // Remove console logs in production
+        },
+        mangle: true, // Obfuscate variable and function names
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

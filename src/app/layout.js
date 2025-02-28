@@ -8,9 +8,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Header from "@/components/Header";
 import theme from "@/components/Theme";
 import { store } from "@/redux/store";
+import Script from "next/script";
 import "./globals.css"; // Tailwind or global styles
 
-// To solve this usecase: On refresh data between header and footer is not visible for half a second.
 const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
 
 export default function RootLayout({ children }) {
@@ -23,25 +23,9 @@ export default function RootLayout({ children }) {
     razorpayScript.async = true;
     document.body.appendChild(razorpayScript);
 
-    // Load Google Analytics script
-    const gtagScript = document.createElement("script");
-    gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-33BT42L6RN";
-    gtagScript.async = true;
-    document.head.appendChild(gtagScript);
-
-    // Initialize Google Analytics
-    window.dataLayer = window.dataLayer || [];
-    const gtag = () => {
-      dataLayer.push(arguments);
-    };
-    window.gtag = gtag;
-    window.gtag("js", new Date());
-    window.gtag("config", "G-33BT42L6RN");
-
     // Cleanup
     return () => {
       document.body.removeChild(razorpayScript);
-      document.head.removeChild(gtagScript);
     };
   }, [router.events]);
 
@@ -65,6 +49,24 @@ export default function RootLayout({ children }) {
         <link
           href="https://fonts.googleapis.com/css2?family=Macondo&display=swap"
           rel="stylesheet"
+        />
+
+        {/* Google Analytics Script */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-33BT42L6RN"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-33BT42L6RN');
+            `,
+          }}
         />
 
         <title>The Vedic Wellness</title>
