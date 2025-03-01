@@ -142,6 +142,9 @@ export default function Header() {
   const handleKeyDown = (event) => {
     if (event.key === "Escape") {
       clearSearch();
+      if (desktopSearchInputRef.current) {
+        desktopSearchInputRef.current.blur();
+      }
     } else if (event.key === "Enter") {
       setSearchOpen(false); // Close search bar on mobile
       if (desktopSearchInputRef.current) {
@@ -172,7 +175,7 @@ export default function Header() {
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
             zIndex: 1,
           }}
           onClick={() => {
@@ -335,6 +338,16 @@ export default function Header() {
                   cursor: "pointer",
                   boxShadow: 2,
                 },
+                boxShadow:
+                  isSearchFocused || searchOpen
+                    ? "0px 4px 10px rgba(0, 0, 0, 0.2)"
+                    : "none", // 3D effect when focused or open
+                border: "1px solid",
+                borderColor:
+                  isSearchFocused || searchOpen
+                    ? "primary.main"
+                    : "transparent", // Border color when focused or open
+                transition: "all 0.3s ease", // Smooth transition for animations
               }}
               placeholder="Search"
               startAdornment={<Search sx={{ mr: 1, color: "primary.main" }} />}
@@ -357,7 +370,6 @@ export default function Header() {
               onFocus={handleSearchFocus}
               onBlur={handleSearchBlur}
             />
-
             {isLoggedIn ? (
               <IconButton
                 aria-label="Sign in menu icon"
@@ -492,7 +504,8 @@ export default function Header() {
                   alt="Logo"
                   style={{ height: "40px", cursor: "pointer" }}
                   onClick={clearSearch}
-                  loading="lazy"  />
+                  loading="lazy"
+                />
               </Link>
             </Box>
             <List>
