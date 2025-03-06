@@ -13,6 +13,7 @@ import {
   Alert,
 } from "@mui/material";
 import { Email, Phone, Person, LocationOn } from "@mui/icons-material";
+import Link from "next/link";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -98,7 +99,9 @@ export default function ContactForm() {
                   variant="body1"
                   sx={{ wordBreak: { xs: "break-all", sm: "normal" } }}
                 >
-                  praveenbharadiya@gmail.com
+                  <Link href="mailto:praveenbharadiya@gmail.com">
+                    praveenbharadiya@gmail.com
+                  </Link>
                 </Typography>
               </Box>
 
